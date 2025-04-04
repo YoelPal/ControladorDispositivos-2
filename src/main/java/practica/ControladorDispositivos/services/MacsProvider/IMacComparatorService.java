@@ -1,0 +1,10 @@
+package practica.ControladorDispositivos.services.MacsProvider;
+
+import practica.ControladorDispositivos.models.entities.MacAddressLog;
+
+import java.util.List;
+
+public interface IMacComparatorService {
+    List<MacAddressLog> listaLogsNoCoincidentes();
+
+}
