@@ -7,4 +7,5 @@ import java.util.List;
 public interface IMacComparatorService {
     List<MacAddressLog> listaLogsNoCoincidentes();
 
+
 }

@@ -25,14 +25,14 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class MacAddressProviderOpenCsvService implements MacAddressProviderService {
+public class CsvParserService  {
     private static final String CSV_SEPARATOR = ",";
-    private static final Logger LOGGER = LoggerFactory.getLogger(MacAddressProviderOpenCsvService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CsvParserService.class);
 
     @Autowired
     private MacAddressLogRepository macAddressLogRepository;
 
-    @Override
+
     public List<DispositivoDTO> obtenerMacs(MultipartFile file) {
         List<DispositivoDTO> dispositivos = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
@@ -82,7 +82,7 @@ public class MacAddressProviderOpenCsvService implements MacAddressProviderServi
         return dispositivos;
     }
 
-    @Override
+
     public List<MacAddressLog> obtenerMacsOpenCSV(MultipartFile file) {
 
         List<DateTimeFormatter> formatters = Arrays.asList(
