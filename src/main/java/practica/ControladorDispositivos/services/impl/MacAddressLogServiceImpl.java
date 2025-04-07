@@ -1,16 +1,15 @@
 package practica.ControladorDispositivos.services.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import practica.ControladorDispositivos.models.entities.MacAddressLog;
 import practica.ControladorDispositivos.models.repositories.MacAddressLogRepository;
-import practica.ControladorDispositivos.services.IMacAddressLogService;
+import practica.ControladorDispositivos.services.IGenericDispService;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class MacAddressLogServiceImpl implements IMacAddressLogService {
+@Service("MacAddressLog")
+public class MacAddressLogServiceImpl implements IGenericDispService<MacAddressLog,String> {
 
     private final MacAddressLogRepository macAddressLogRepository;
 
@@ -25,7 +24,7 @@ public class MacAddressLogServiceImpl implements IMacAddressLogService {
     }
 
     @Override
-    public Optional<MacAddressLog> findByMac(String mac) {
+    public Optional<MacAddressLog> findById(String mac) {
         return Optional.empty();
     }
 
@@ -35,12 +34,12 @@ public class MacAddressLogServiceImpl implements IMacAddressLogService {
     }
 
     @Override
-    public boolean deleteByMac(String mac) {
+    public boolean deleteById(String mac) {
         return false;
     }
 
     @Override
-    public Optional<MacAddressLog> updateMacAddressLog(String mac, MacAddressLog macAddressLog) {
+    public Optional<MacAddressLog> update(MacAddressLog macAddressLog) {
         return Optional.empty();
     }
 }

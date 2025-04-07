@@ -3,9 +3,15 @@ package practica.ControladorDispositivos.models.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "pc")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Pc extends Dispositivo{
 
     @Column(name = "sistema_operativo")
@@ -17,9 +23,6 @@ public class Pc extends Dispositivo{
     @Column(name = "cpu")
     private String cpu;
 
-    public Pc(){
-        super();
-    }
 
     public Pc(String macAdress, String fabricante, String modelo, String propietario, String sistemaOperativo, int ram, String cpu){
         super(macAdress,fabricante,modelo, propietario);
@@ -28,27 +31,4 @@ public class Pc extends Dispositivo{
         this.sistemaOperativo = sistemaOperativo;
     }
 
-    public String getSistemaOperativo() {
-        return sistemaOperativo;
-    }
-
-    public void setSistemaOperativo(String sistemaOperativo) {
-        this.sistemaOperativo = sistemaOperativo;
-    }
-
-    public int getRam() {
-        return ram;
-    }
-
-    public void setRam(int ram) {
-        this.ram = ram;
-    }
-
-    public String getCpu() {
-        return cpu;
-    }
-
-    public void setCpu(String cpu) {
-        this.cpu = cpu;
-    }
 }

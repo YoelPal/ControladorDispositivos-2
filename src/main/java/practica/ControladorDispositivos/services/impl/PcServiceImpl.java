@@ -3,13 +3,13 @@ package practica.ControladorDispositivos.services.impl;
 import org.springframework.stereotype.Service;
 import practica.ControladorDispositivos.models.entities.Pc;
 import practica.ControladorDispositivos.models.repositories.PcRepository;
-import practica.ControladorDispositivos.services.IPcService;
+import practica.ControladorDispositivos.services.IGenericDispService;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class PcServiceImpl implements IPcService {
+@Service("Pc")
+public class PcServiceImpl implements IGenericDispService<Pc,String> {
     private final PcRepository pcRepository;
 
     public PcServiceImpl(PcRepository pcRepository) {
@@ -18,11 +18,11 @@ public class PcServiceImpl implements IPcService {
 
     @Override
     public List<Pc> findAll() {
-        return (List<Pc>) pcRepository.findAll();
+        return pcRepository.findAll();
     }
 
     @Override
-    public Optional<Pc> findByMac(String mac) {
+    public Optional<Pc> findById(String mac) {
         return pcRepository.findById(mac);
     }
 
@@ -32,7 +32,7 @@ public class PcServiceImpl implements IPcService {
     }
 
     @Override
-    public boolean deleteByMac(String mac) {
+    public boolean deleteById(String mac) {
         Optional<Pc> pcOpt = pcRepository.findById(mac);
         if (pcOpt.isPresent()){
             pcRepository.deleteById(mac);
@@ -42,7 +42,7 @@ public class PcServiceImpl implements IPcService {
     }
 
     @Override
-    public Optional<Pc> updatePc( Pc pc) {
+    public Optional<Pc> update(Pc pc) {
         Optional<Pc> pcOptional = pcRepository.findById(pc.getMacAddress());
         if (pcOptional.isPresent()){
             return Optional.of(pcRepository.save(pc));

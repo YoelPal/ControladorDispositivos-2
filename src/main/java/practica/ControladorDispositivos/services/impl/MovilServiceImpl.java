@@ -3,13 +3,14 @@ package practica.ControladorDispositivos.services.impl;
 import org.springframework.stereotype.Service;
 import practica.ControladorDispositivos.models.entities.Movil;
 import practica.ControladorDispositivos.models.repositories.MovilRepository;
-import practica.ControladorDispositivos.services.IMovilService;
+import practica.ControladorDispositivos.services.IGenericDispService;
+
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class MovilServiceImpl implements IMovilService {
+@Service("Movil")
+public class MovilServiceImpl implements IGenericDispService<Movil,String> {
     private final MovilRepository movilRepository;
 
     public MovilServiceImpl(MovilRepository movilRepository) {
@@ -18,11 +19,11 @@ public class MovilServiceImpl implements IMovilService {
 
     @Override
     public List<Movil> findAll() {
-        return (List<Movil>) movilRepository.findAll();
+        return  movilRepository.findAll();
     }
 
     @Override
-    public Optional<Movil> findByMac(String mac) {
+    public Optional<Movil> findById(String mac) {
         return  movilRepository.findById(mac);
     }
 
@@ -32,7 +33,7 @@ public class MovilServiceImpl implements IMovilService {
     }
 
     @Override
-    public boolean deleteByMac(String mac) {
+    public boolean deleteById(String mac) {
         if (movilRepository.existsById(mac)) {
             movilRepository.deleteById(mac);
             return true;
@@ -41,10 +42,9 @@ public class MovilServiceImpl implements IMovilService {
     }
 
     @Override
-    public Optional<Movil> updateMovil(String mac, Movil movil){
-        Optional<Movil> movilOpt = movilRepository.findById(mac);
+    public Optional<Movil> update( Movil movil){
+        Optional<Movil> movilOpt = movilRepository.findById(movil.getMacAddress());
         if (movilOpt.isPresent()){
-            movil.setMacAddress(mac);
             return Optional.of(movilRepository.save(movil));
         }
         return Optional.empty();

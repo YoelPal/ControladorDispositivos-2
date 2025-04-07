@@ -8,7 +8,7 @@ import practica.ControladorDispositivos.models.repositories.MacAddressLogReposit
 
 import java.util.List;
 @Service("csvDataSource")
-public class CsvMacAddressProviderService implements MacAddressProviderService{
+public class CsvMacAddressProviderService implements IMacAddressProviderService {
     private final CsvParserService csvParserService;
     private final MacAddressLogRepository macAddressLogRepository;
 

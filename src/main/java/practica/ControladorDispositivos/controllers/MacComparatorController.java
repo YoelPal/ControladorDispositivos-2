@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import practica.ControladorDispositivos.models.entities.MacAddressLog;
 import practica.ControladorDispositivos.services.MacsProvider.IMacComparatorService;
-import practica.ControladorDispositivos.services.MacsProvider.MacComparatorService;
 
-import javax.crypto.Mac;
+
+
 import java.util.List;
 
 @RestController
