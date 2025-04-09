@@ -1,36 +1,46 @@
 package practica.ControladorDispositivos.services.impl;
 
 import org.springframework.stereotype.Service;
+import practica.ControladorDispositivos.models.dto.MacAddressLogDTO;
 import practica.ControladorDispositivos.models.entities.MacAddressLog;
 import practica.ControladorDispositivos.models.repositories.MacAddressLogRepository;
 import practica.ControladorDispositivos.services.IGenericDispService;
+import practica.ControladorDispositivos.services.dtoConverter.DtoConverterService;
+import practica.ControladorDispositivos.services.dtoConverter.IDtoConverterService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service("MacAddressLog")
-public class MacAddressLogServiceImpl implements IGenericDispService<MacAddressLog,String> {
+public class MacAddressLogServiceImpl implements IGenericDispService<MacAddressLogDTO,MacAddressLog, String> {
 
     private final MacAddressLogRepository macAddressLogRepository;
+    private final IDtoConverterService dtoConverterService;
 
-    public MacAddressLogServiceImpl(MacAddressLogRepository macAddressLogRepository) {
+    public MacAddressLogServiceImpl(MacAddressLogRepository macAddressLogRepository, DtoConverterService dtoConverterService) {
         this.macAddressLogRepository = macAddressLogRepository;
+        this.dtoConverterService = dtoConverterService;
     }
 
 
     @Override
-    public List<MacAddressLog> findAll() {
-        return List.of();
+    public List<MacAddressLogDTO> findAll() {
+        return macAddressLogRepository.findAll()
+                .stream()
+                .map(dtoConverterService::convertToMacAddressLogDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<MacAddressLog> findById(String mac) {
+    public Optional<MacAddressLogDTO> findById(String mac) {
         return Optional.empty();
     }
 
     @Override
-    public MacAddressLog save(MacAddressLog macAddressLog) {
-        return macAddressLogRepository.save(macAddressLog);
+    public MacAddressLogDTO save(MacAddressLog macAddressLog) {
+        MacAddressLog savedLog = macAddressLogRepository.save(macAddressLog);
+        return dtoConverterService.convertToMacAddressLogDTO(savedLog);
     }
 
     @Override
@@ -39,7 +49,7 @@ public class MacAddressLogServiceImpl implements IGenericDispService<MacAddressL
     }
 
     @Override
-    public Optional<MacAddressLog> update(MacAddressLog macAddressLog) {
+    public Optional<MacAddressLogDTO> update(MacAddressLog macAddressLog) {
         return Optional.empty();
     }
 }

@@ -8,12 +8,12 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder
-public class DispositivoDTO {
-    private String macAddress;
-    private String fabricante;
-    private String modelo;
-    private String propietario;
+public class PcDTO extends DispositivoDTO{
+    private String cpu;
+    private int ram;
+    private String sistemaOperativo;
+
 }

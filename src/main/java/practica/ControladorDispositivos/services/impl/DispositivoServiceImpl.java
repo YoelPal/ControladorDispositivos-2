@@ -1,38 +1,54 @@
 package practica.ControladorDispositivos.services.impl;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import practica.ControladorDispositivos.models.entities.Dispositivo;
+import practica.ControladorDispositivos.models.dto.*;
+import practica.ControladorDispositivos.models.entities.*;
 import practica.ControladorDispositivos.models.repositories.DispositivoRepository;
 import practica.ControladorDispositivos.services.IGenericDispService;
+import practica.ControladorDispositivos.services.dtoConverter.IDtoConverterService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service("Dispositivo")
-public class DispositivoServiceImpl implements IGenericDispService<Dispositivo,String> {
+public class DispositivoServiceImpl implements IGenericDispService<DispositivoDTO,Dispositivo,String> {
     private final DispositivoRepository dispositivoRepository;
+    private final IDtoConverterService dtoConverterService;
+    private final ModelMapper modelMapper;
 
-    public DispositivoServiceImpl(DispositivoRepository dispositivoRepository) {
+    public DispositivoServiceImpl(DispositivoRepository dispositivoRepository, IDtoConverterService dtoConverterService, ModelMapper modelMapper) {
         this.dispositivoRepository = dispositivoRepository;
+        this.dtoConverterService = dtoConverterService;
+        this.modelMapper = modelMapper;
     }
 
-    @Override
+    /*@Override
     public List<Dispositivo> findAll() {
         return dispositivoRepository.findAll();
+    }*/
+
+    @Override
+    public List<DispositivoDTO> findAll(){
+
+         return dispositivoRepository.findAll()
+                .stream()
+                .map(dtoConverterService::converToDispositivoDTO)
+                 .toList();
     }
 
     @Override
-    public Optional<Dispositivo> findById(String mac) {
-        Optional<Dispositivo> dispositivoOpt = dispositivoRepository.findById(mac);
-        if (dispositivoOpt.isPresent()){
-            return Optional.of(dispositivoOpt.get());
-        }
-        return Optional.empty();
+    public Optional<DispositivoDTO> findById(String mac) {
+        Optional<DispositivoDTO> dispositivoOpt = dispositivoRepository.findById(mac).map(dtoConverterService::converToDispositivoDTO);
+        return dispositivoOpt;
     }
 
+
     @Override
-    public Dispositivo save(Dispositivo dispositivo) {
-        return dispositivoRepository.save(dispositivo);
+    public DispositivoDTO save(Dispositivo dispositivo) {
+        Dispositivo savedDispositivo = dispositivoRepository.save(dispositivo);
+        return dtoConverterService.converToDispositivoDTO(savedDispositivo);
     }
 
     @Override
@@ -43,11 +59,14 @@ public class DispositivoServiceImpl implements IGenericDispService<Dispositivo,S
         }
         return false;
     }
+
+
     @Override
-    public Optional<Dispositivo> update(Dispositivo dispositivo) {
+    public Optional<DispositivoDTO> update(Dispositivo dispositivo) {
         Optional<Dispositivo> dispositivoOpt = dispositivoRepository.findById(dispositivo.getMacAddress());
         if (dispositivoOpt.isPresent()){
-           return Optional.of(dispositivoRepository.save(dispositivo)) ;
+            Dispositivo updatedDispositivo = dispositivoRepository.save(dispositivo);
+           return Optional.of(dtoConverterService.converToDispositivoDTO(updatedDispositivo)) ;
         }
         return Optional.empty();
     }

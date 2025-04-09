@@ -21,7 +21,7 @@ public class CsvMacAddressProviderService implements IMacAddressProviderService 
 
     @Override
     public List<MacAddressLog> obtenerLogs() {
-        return csvParserService.obtenerMacsOpenCSV(file);
+        return csvParserService.CsvValoresPorCabeceras(file);
     }
 
     @Override
