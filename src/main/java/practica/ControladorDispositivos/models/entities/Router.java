@@ -19,8 +19,8 @@ public class Router extends Dispositivo{
     @Column(name = "ancho_banda")
     private int anchoBanda;
 
-    public Router(String macAdress,String fabricante,String modelo, String propietario,int velocidad, int anchoBanda){
-        super(macAdress,fabricante,modelo, propietario);
+    public Router(String macAdress,String fabricante,String modelo, String propietario,int velocidad, int anchoBanda, String sede){
+        super(macAdress,fabricante,modelo, propietario, sede);
         this.anchoBanda = anchoBanda;
         this.velocidad = velocidad;
 

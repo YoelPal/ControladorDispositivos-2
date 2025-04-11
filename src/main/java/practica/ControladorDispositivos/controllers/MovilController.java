@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import practica.ControladorDispositivos.models.dto.MovilDTO;
 import practica.ControladorDispositivos.models.entities.Movil;
 import practica.ControladorDispositivos.services.IGenericDispService;
-import practica.ControladorDispositivos.services.impl.MovilServiceImpl;
-
 import java.util.List;
 import java.util.Optional;
 

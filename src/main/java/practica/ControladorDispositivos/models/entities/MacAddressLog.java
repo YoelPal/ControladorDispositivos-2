@@ -26,11 +26,28 @@ public class MacAddressLog {
     @Column(name = "timestamp")
     private LocalDateTime timestamp;
 
-    @Column(name = "empresa")
-    private String empresa;
+    @Column(name = "sede")
+    private String sede;
 
-    @Column(name = "departamento")
-    private String departamento;
+    @Column(name = "ip_switch")
+    private String ipSwitch;
+
+    @Column(name = "vlan")
+    private String vlan;
+
+    @Column(name = "puerto")
+    private String puerto;
+
+    @Column(name = "ip")
+    private String ip;
+
+    @Column(name = "hostname")
+    private String hostname;
+
+    @Column(name = "directorio")
+    private String directorio;
+
+
 
 
 }

@@ -21,10 +21,11 @@ public class Ap extends Dispositivo{
     private int estandarWifi;
 
 
-    public Ap(String macAdress,String fabricante,String modelo, String propietario, String banda, int estandarWifi){
-        super(macAdress,fabricante,modelo, propietario);
+    public Ap(String macAdress,String fabricante,String modelo, String propietario, String banda, int estandarWifi,String sede){
+        super(macAdress,fabricante,modelo, propietario, sede);
         this.banda = banda;
         this.estandarWifi = estandarWifi;
+
     }
 
 }

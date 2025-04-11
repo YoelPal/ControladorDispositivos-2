@@ -20,8 +20,8 @@ public class Switch  extends Dispositivo{
     @Column(name = "velocidad")
     private int velocidad;
 
-    public Switch(String macAdress,String fabricante,String modelo, String propietario, int puertos, int velocidad){
-        super(macAdress,fabricante,modelo, propietario);
+    public Switch(String macAdress,String fabricante,String modelo, String propietario, int puertos, int velocidad,String sede){
+        super(macAdress,fabricante,modelo, propietario, sede);
         this.puertos = puertos;
         this.velocidad = velocidad;
     }

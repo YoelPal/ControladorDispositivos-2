@@ -10,34 +10,42 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import practica.ControladorDispositivos.models.dto.DispositivoLogDTO;
 import practica.ControladorDispositivos.models.entities.MacAddressLog;
-import practica.ControladorDispositivos.models.repositories.MacAddressLogRepository;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 
 @Service
 public class CsvParserService {
     private static final char CSV_SEPARATOR = '|';
     private static final Logger LOGGER = LoggerFactory.getLogger(CsvParserService.class);
-    private MacAddressLogRepository macAddressLogRepository;
 
-    @Value("${csv.header.empresa}")
-    private String headerEmpresaName;
 
-    @Value("${csv.header.departamento}")
-    private String headerDepartamentoName;
+    @Value("${csv.header.vlan}")
+    private String headerVlan;
+
+    @Value("${csv.header.puerto}")
+    private String headerPuerto;
+
+    @Value("${csv.header.ip}")
+    private String headerIp;
+
+    @Value("${csv.header.hostname}")
+    private String headerHostname;
+
+    @Value("${csv.header.directorio}")
+    private String headerDirectorio;
+
+    @Value("${csv.header.sede}")
+    private String headerSedeName;
 
     @Value("${csv.header.mac}")
     private String headerMacName;
 
-    @Value("${csv.header.timestamp}")
-    private String headerTimestampName;
+    @Value("${csv.header.ipSwitch}")
+    private String headerIpSwitch;
 
 
     @Value("#{'${cabeceras.requeridas}'.split(',')}")
@@ -51,14 +59,10 @@ public class CsvParserService {
             DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss") // Otro formato posible
     );
 
-    public void guardarDispositivos(List<MacAddressLog> macAddressLogs) {
-        macAddressLogRepository.saveAll(macAddressLogs);
-    }
-
     public List<MacAddressLog> CsvValoresPorCabeceras(MultipartFile file) {
         Map<String, Integer> cabecerasMap = new HashMap<>();
         List<MacAddressLog> macAddressLogs = new ArrayList<>();
-        
+
         try (Reader reader = new InputStreamReader(file.getInputStream(),StandardCharsets.UTF_8)) {
 
             CSVParser parser = new CSVParserBuilder()
@@ -97,13 +101,17 @@ public class CsvParserService {
                 numeroLinea++;
 
                 if (datosTotales.length > 0) {
-                    String empresa = obtenerValor(datosTotales, cabecerasMap, headerEmpresaName);
-                    String departamento = obtenerValor(datosTotales, cabecerasMap, headerDepartamentoName);
-                    String macAddress = obtenerValor(datosTotales, cabecerasMap, headerMacName);
-                    String timestampStr = obtenerValor(datosTotales, cabecerasMap, headerTimestampName);
+                    String sede = obtenerValor(datosTotales, cabecerasMap, headerSedeName);
+                    String mac = obtenerValor(datosTotales, cabecerasMap, headerMacName);
+                    String ipSwitch = obtenerValor(datosTotales, cabecerasMap, headerIpSwitch);
+                    String vlan = obtenerValor(datosTotales, cabecerasMap, headerVlan);
+                    String puerto = obtenerValor(datosTotales,cabecerasMap,headerPuerto);
+                    String ip = obtenerValor(datosTotales,cabecerasMap,headerIp);
+                    String hostname = obtenerValor(datosTotales,cabecerasMap,headerHostname);
+                    String directorio = obtenerValor(datosTotales,cabecerasMap,headerDirectorio);
 
                     LocalDateTime parsedTimestamp = null;
-                    if (timestampStr != null) {
+                    /*if (timestampStr != null) {
                         boolean parsed = false;
                         for (DateTimeFormatter format : formatters) {
                             try {
@@ -116,14 +124,19 @@ public class CsvParserService {
                         if (!parsed) {
                             LOGGER.warn("Línea {}: Valor de timestamp no encontrado o vacío.", numeroLinea);
                         }
-                    }
+                    }*/
 
-                   if (macAddress != null) {
+                   if (mac != null) {
                         MacAddressLog log = MacAddressLog.builder()
-                                .empresa(empresa)
-                                .departamento(departamento)
-                                .macAddress(macAddress)
-                                .timestamp(parsedTimestamp).build();
+                                .sede(sede)
+                                .macAddress(mac)
+                                .ip(ip)
+                                .hostname(hostname)
+                                .vlan(vlan)
+                                .ipSwitch(ipSwitch)
+                                .puerto(puerto)
+                                .directorio(directorio)
+                                .timestamp(LocalDateTime.now()).build();
                         macAddressLogs.add(log);
                     }
                    else {

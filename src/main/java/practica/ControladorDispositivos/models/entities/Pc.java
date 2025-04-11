@@ -24,8 +24,8 @@ public class Pc extends Dispositivo{
     private String cpu;
 
 
-    public Pc(String macAdress, String fabricante, String modelo, String propietario, String sistemaOperativo, int ram, String cpu){
-        super(macAdress,fabricante,modelo, propietario);
+    public Pc(String macAdress, String fabricante, String modelo, String propietario,String sede, String sistemaOperativo, int ram, String cpu){
+        super(macAdress,fabricante,modelo, propietario, sede);
         this.cpu = cpu;
         this.ram = ram;
         this.sistemaOperativo = sistemaOperativo;

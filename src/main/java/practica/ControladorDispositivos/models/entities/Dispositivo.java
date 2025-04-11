@@ -29,4 +29,7 @@ public abstract class Dispositivo {
     @Column(name = "propietario")
     protected String propietario;
 
+    @Column(name = "sede")
+    protected String sede;
+
 }

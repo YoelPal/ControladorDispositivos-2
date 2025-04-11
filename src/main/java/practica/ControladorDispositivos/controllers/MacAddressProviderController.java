@@ -19,8 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import practica.ControladorDispositivos.models.entities.MacAddressLog;
 import practica.ControladorDispositivos.services.MacsManager.CsvMacAddressProviderService;
 import practica.ControladorDispositivos.services.MacsManager.IMacAddressProviderService;
-
-import javax.sql.DataSource;
 import java.util.List;
 
 @RestController
@@ -31,7 +29,7 @@ public class MacAddressProviderController {
     private final IMacAddressProviderService macAddressProvider;
 
     @Autowired
-    public MacAddressProviderController(@Qualifier("csvDataSource") IMacAddressProviderService macAddressProvider, @Qualifier("dataSource") DataSource dataSource) {
+    public MacAddressProviderController(@Qualifier("csvDataSource") IMacAddressProviderService macAddressProvider) {
         this.macAddressProvider = macAddressProvider;
 
     }

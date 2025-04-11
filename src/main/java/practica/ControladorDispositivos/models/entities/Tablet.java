@@ -19,8 +19,8 @@ public class Tablet extends Dispositivo{
     @Column(name = "tamanyo")
     private double tamanyo;
 
-    public Tablet(String macAdress,String fabricante,String modelo, String propietario, double tamanyo){
-        super(macAdress,fabricante,modelo, propietario);
+    public Tablet(String macAdress,String fabricante,String modelo, String propietario, double tamanyo,String sede){
+        super(macAdress,fabricante,modelo, propietario,sede);
         this.tamanyo = tamanyo;
     }
 }
