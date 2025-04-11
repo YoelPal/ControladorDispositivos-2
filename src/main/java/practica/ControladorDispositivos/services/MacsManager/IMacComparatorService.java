@@ -1,4 +1,4 @@
-package practica.ControladorDispositivos.services.MacsProvider;
+package practica.ControladorDispositivos.services.MacsManager;
 
 import practica.ControladorDispositivos.models.entities.MacAddressLog;
 

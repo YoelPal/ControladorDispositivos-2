@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class MacAddressLogDTO {
-    private String mcAdress;
+    private String macAddress;
     private LocalDateTime timestamp;
     private String departamento;
     private String Empresa;

@@ -6,11 +6,12 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.4</version>
+
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>practica</groupId>
 	<artifactId>ControladorDispositivos</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>ControladorDispositivos</name>
 	<description>Dispositivos en la Red</description>
 	<url/>
@@ -91,11 +92,19 @@
 			<artifactId>modelmapper</artifactId>
 			<version>3.2.2</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.8.6</version>
+		</dependency>
 	</dependencies>
 
 
 
 	<build>
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

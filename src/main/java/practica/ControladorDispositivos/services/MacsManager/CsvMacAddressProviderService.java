@@ -1,4 +1,4 @@
-package practica.ControladorDispositivos.services.MacsProvider;
+package practica.ControladorDispositivos.services.MacsManager;
 
 import lombok.Setter;
 import org.springframework.stereotype.Service;

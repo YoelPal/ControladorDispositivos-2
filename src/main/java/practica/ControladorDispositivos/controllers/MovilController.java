@@ -1,7 +1,12 @@
 package practica.ControladorDispositivos.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import practica.ControladorDispositivos.models.dto.MovilDTO;
@@ -14,28 +19,47 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/moviles")
+@Tag(name = "Movil", description = "Dispositivos moviles almacenados por MAC")
 public class MovilController {
 
     private final IGenericDispService<MovilDTO,Movil,String> movilService;
+    private final ModelMapper modelMapper;
 
-    public MovilController(@Qualifier("Movil") IGenericDispService<MovilDTO,Movil,String> movilService) {
+    public MovilController(@Qualifier("Movil") IGenericDispService<MovilDTO,Movil,String> movilService, ModelMapper modelMapper) {
         this.movilService = movilService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping
-    public List<MovilDTO> listaMoviles() {
-        return movilService.findAll();
-    }
+    @Operation(summary = "Obtener lista de móviles", description = "Muestra la lista de dispositivos moviles almacenados por MAC.")
+    public ResponseEntity<List<MovilDTO>> listaMoviles() {
+        List<MovilDTO> listaMoviles = movilService.findAll();
+        if (listaMoviles.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(listaMoviles);    }
 
     @PostMapping
-    public ResponseEntity<MovilDTO> saveMovil(@RequestBody Movil movil){
-       return ResponseEntity.ok(movilService.save(movil));
+    @Operation(summary = "Guarda un dispositivo movil", description = "Guarda un dispositivo móvil a partir de un archivo JASON")
+    public ResponseEntity<?> saveMovil(@Parameter(description = "Objeto Movil en formato JASON.") @RequestBody MovilDTO movilDTO){
+        if (movilService.findById(movilDTO.getMacAddress()).isPresent()){
+            return ResponseEntity.badRequest().body("La dirección MAC ya está asignada");
+        }
+        Movil movil = modelMapper.map(movilDTO,Movil.class);
+       return ResponseEntity.status(HttpStatus.CREATED).body(movilService.save(movil));
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<?> updateMovil(@RequestBody Movil movil){
-        Optional<MovilDTO> movilOptional = movilService.findById(movil.getMacAddress());
+    @PutMapping("/{macAddress}")
+    @Operation(summary = "Actualiza un dispositivo movil", description = "Permite actualizar un objeto Movil ya existente")
+    public ResponseEntity<?> updateMovil(@Parameter(description = "Objeto Movil con los datos a actualizar en formato JASON.") @RequestBody MovilDTO movilDTO,
+                                         @Parameter(description = "Direccion MAc del Movil a actualizar")@PathVariable String macAddress){
+        if (!macAddress.equals(movilDTO.getMacAddress())){
+            return ResponseEntity.badRequest().body("El MAC Address en la URL no coincide con el MAC Address del cuerpo de la petición.");
+        }
+        Optional<MovilDTO> movilOptional = movilService.findById(movilDTO.getMacAddress());
         if (movilOptional.isPresent()){
+            movilDTO.setMacAddress(macAddress);
+            Movil movil = modelMapper.map(movilDTO, Movil.class);
             return ResponseEntity.ok( movilService.update(movil));
         }
         return ResponseEntity.notFound().build();

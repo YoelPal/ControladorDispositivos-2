@@ -1,5 +1,6 @@
 package practica.ControladorDispositivos.services.impl;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import practica.ControladorDispositivos.models.dto.MacAddressLogDTO;
 import practica.ControladorDispositivos.models.entities.MacAddressLog;
@@ -17,10 +18,12 @@ public class MacAddressLogServiceImpl implements IGenericDispService<MacAddressL
 
     private final MacAddressLogRepository macAddressLogRepository;
     private final IDtoConverterService dtoConverterService;
+    private final ModelMapper modelMapper;
 
-    public MacAddressLogServiceImpl(MacAddressLogRepository macAddressLogRepository, DtoConverterService dtoConverterService) {
+    public MacAddressLogServiceImpl(MacAddressLogRepository macAddressLogRepository, DtoConverterService dtoConverterService, ModelMapper modelMapper) {
         this.macAddressLogRepository = macAddressLogRepository;
         this.dtoConverterService = dtoConverterService;
+        this.modelMapper = modelMapper;
     }
 
 
@@ -28,7 +31,7 @@ public class MacAddressLogServiceImpl implements IGenericDispService<MacAddressL
     public List<MacAddressLogDTO> findAll() {
         return macAddressLogRepository.findAll()
                 .stream()
-                .map(dtoConverterService::convertToMacAddressLogDTO)
+                .map(entity -> modelMapper.map(entity,MacAddressLogDTO.class))
                 .collect(Collectors.toList());
     }
 
