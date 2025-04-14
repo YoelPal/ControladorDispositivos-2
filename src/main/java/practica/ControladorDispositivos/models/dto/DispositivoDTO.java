@@ -16,4 +16,5 @@ public class DispositivoDTO {
     private String fabricante;
     private String modelo;
     private String propietario;
+    private String sede;
 }

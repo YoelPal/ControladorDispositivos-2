@@ -1,5 +1,6 @@
 package practica.ControladorDispositivos.services.impl;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import practica.ControladorDispositivos.models.dto.PcDTO;
 import practica.ControladorDispositivos.models.entities.Pc;
@@ -16,29 +17,31 @@ import java.util.stream.Collectors;
 public class PcServiceImpl implements IGenericDispService<PcDTO,Pc,String> {
     private final PcRepository pcRepository;
     private final IDtoConverterService dtoConverterService;
+    private final ModelMapper modelMapper;
 
-    public PcServiceImpl(PcRepository pcRepository, IDtoConverterService dtoConverterService) {
+    public PcServiceImpl(PcRepository pcRepository, IDtoConverterService dtoConverterService, ModelMapper modelMapper) {
         this.pcRepository = pcRepository;
         this.dtoConverterService = dtoConverterService;
+        this.modelMapper = modelMapper;
     }
 
     @Override
     public List<PcDTO> findAll() {
         return pcRepository.findAll()
                 .stream()
-                .map(dtoConverterService::converToPcDTO)
+                .map(entity->modelMapper.map(entity, PcDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<PcDTO> findById(String mac) {
-        return pcRepository.findById(mac).map(dtoConverterService::converToPcDTO);
+        return pcRepository.findById(mac).map(entity->modelMapper.map(entity, PcDTO.class));
     }
 
     @Override
     public PcDTO save(Pc pc) {
         Pc savedPc = pcRepository.save(pc);
-        return dtoConverterService.converToPcDTO(savedPc);
+        return modelMapper.map(savedPc, PcDTO.class);
     }
 
     @Override
@@ -56,8 +59,19 @@ public class PcServiceImpl implements IGenericDispService<PcDTO,Pc,String> {
         Optional<Pc> pcOptional = pcRepository.findById(pc.getMacAddress());
         if (pcOptional.isPresent()){
             Pc updatedPc = pcRepository.save(pc);
-            return Optional.of(dtoConverterService.converToPcDTO(updatedPc));
+            return Optional.of(modelMapper.map(updatedPc, PcDTO.class));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<PcDTO>> findBySede(String sede) {
+        List<PcDTO> pcDTOList = pcRepository.findBySede(sede).stream()
+                .map(entity->modelMapper.map(entity,PcDTO.class))
+                .toList();
+        if (pcDTOList.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(pcDTOList);
     }
 }

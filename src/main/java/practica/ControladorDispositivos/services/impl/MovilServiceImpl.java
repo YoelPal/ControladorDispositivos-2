@@ -1,45 +1,44 @@
 package practica.ControladorDispositivos.services.impl;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import practica.ControladorDispositivos.models.dto.MovilDTO;
 import practica.ControladorDispositivos.models.entities.Movil;
 import practica.ControladorDispositivos.models.repositories.MovilRepository;
 import practica.ControladorDispositivos.services.IGenericDispService;
-import practica.ControladorDispositivos.services.dtoConverter.DtoConverterService;
-import practica.ControladorDispositivos.services.dtoConverter.IDtoConverterService;
-
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @Service("Movil")
 public class MovilServiceImpl implements IGenericDispService<MovilDTO,Movil,String> {
     private final MovilRepository movilRepository;
-    private final IDtoConverterService dtoConverterService;
 
-    public MovilServiceImpl(MovilRepository movilRepository, IDtoConverterService dtoConverterService) {
+    private final ModelMapper modelMapper;
+
+    public MovilServiceImpl(MovilRepository movilRepository,ModelMapper modelMapper) {
         this.movilRepository = movilRepository;
-        this.dtoConverterService = dtoConverterService;
+        this.modelMapper = modelMapper;
     }
 
     @Override
     public List<MovilDTO> findAll() {
         return  movilRepository.findAll()
                 .stream()
-                .map(dtoConverterService::converToMovilDTO)
-                .collect(Collectors.toList());
+                .map(entity->(modelMapper.map(entity, MovilDTO.class)))
+                .toList();
     }
 
     @Override
     public Optional<MovilDTO> findById(String mac) {
-        return  movilRepository.findById(mac).map(dtoConverterService::converToMovilDTO);
+
+        return movilRepository.findById(mac).map(movil->modelMapper.map(movil, MovilDTO.class));
     }
 
     @Override
     public MovilDTO save(Movil movil) {
         Movil savedMovil = movilRepository.save(movil);
-        return dtoConverterService.converToMovilDTO(savedMovil) ;
+        return modelMapper.map(savedMovil,MovilDTO.class) ;
     }
 
     @Override
@@ -56,8 +55,19 @@ public class MovilServiceImpl implements IGenericDispService<MovilDTO,Movil,Stri
         Optional<Movil> movilOpt = movilRepository.findById(movil.getMacAddress());
         if (movilOpt.isPresent()){
             Movil updatedMovil = movilRepository.save(movil);
-            return Optional.of(dtoConverterService.converToMovilDTO(updatedMovil));
+            return Optional.of(modelMapper.map(updatedMovil, MovilDTO.class));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<MovilDTO>> findBySede(String sede) {
+        List<MovilDTO> apDTOList =movilRepository.findBySede(sede).stream()
+                .map(entity->modelMapper.map(entity, MovilDTO.class))
+                .toList();
+        if (apDTOList.isEmpty()){
+            return Optional.empty();
+        }
+        return Optional.of(apDTOList);
     }
 }

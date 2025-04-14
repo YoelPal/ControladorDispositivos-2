@@ -2,11 +2,14 @@ package practica.ControladorDispositivos.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import practica.ControladorDispositivos.models.dto.DispositivoDTO;
 import practica.ControladorDispositivos.models.dto.TabletDTO;
 import practica.ControladorDispositivos.models.entities.Tablet;
 import practica.ControladorDispositivos.services.IGenericDispService;
@@ -59,6 +62,20 @@ public class TabletController {
             return ResponseEntity.ok(tabletService.update(tablet));
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/sede/{sede}")
+    @Operation(summary = "Busca Tablets por su sede", description = "Muestra una lista de Tablets con la misma sede.")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "404", description = "Tablets no enconstrados con esa sede."),
+            @ApiResponse(responseCode = "200", description = "Lista encontrada.")
+    })
+    public ResponseEntity<List<TabletDTO>> findBySede(@Parameter(description = "Sede de los dispositivos")@PathVariable String sede){
+        Optional<List<TabletDTO>> dispositivoDTOList = tabletService.findBySede(sede);
+        if (dispositivoDTOList.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(dispositivoDTOList.get());
     }
 
 }

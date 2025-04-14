@@ -4,9 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import practica.ControladorDispositivos.models.dto.DispositivoDTO;
-import practica.ControladorDispositivos.models.dto.MovilDTO;
 import practica.ControladorDispositivos.models.entities.Dispositivo;
-import practica.ControladorDispositivos.models.entities.Movil;
 
 @Configuration
 public class ModelMapperConfig {

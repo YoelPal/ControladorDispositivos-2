@@ -2,6 +2,8 @@ package practica.ControladorDispositivos.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import practica.ControladorDispositivos.models.dto.ApDTO;
+import practica.ControladorDispositivos.models.dto.DispositivoDTO;
 import practica.ControladorDispositivos.models.entities.Ap;
 import practica.ControladorDispositivos.services.IGenericDispService;
 
@@ -61,5 +64,19 @@ public class ApController {
             return ResponseEntity.ok(apService.update(ap));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ap no encontrado con la MAC: " + macAddress);
+    }
+
+    @GetMapping("/sede/{sede}")
+    @Operation(summary = "Busca Ap por su sede", description = "Muestra una lista de Aps con la misma sede.")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "404", description = "Aps no enconstrados con esa sede."),
+            @ApiResponse(responseCode = "200", description = "Lista encontrada.")
+    })
+    public ResponseEntity<List<ApDTO>> findBySede(@Parameter(description = "Sede de los dispositivos")@PathVariable String sede){
+        Optional<List<ApDTO>> dispositivoDTOList = apService.findBySede(sede);
+        if (dispositivoDTOList.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(dispositivoDTOList.get());
     }
 }

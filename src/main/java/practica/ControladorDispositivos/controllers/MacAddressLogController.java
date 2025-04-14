@@ -1,18 +1,24 @@
 package practica.ControladorDispositivos.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import practica.ControladorDispositivos.models.dto.MacAddressLogDTO;
 import practica.ControladorDispositivos.models.entities.MacAddressLog;
+import practica.ControladorDispositivos.models.repositories.MacAddressLogRepository;
 import practica.ControladorDispositivos.services.IGenericDispService;
+import practica.ControladorDispositivos.services.impl.MacAddressLogServiceImpl;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/logs")
@@ -20,11 +26,13 @@ import java.util.List;
 public class MacAddressLogController {
 
     private final IGenericDispService<MacAddressLogDTO, MacAddressLog,String> genericDispService;
+    private final ModelMapper modelMapper;
 
 
     @Autowired
-    public MacAddressLogController(@Qualifier("MacAddressLog") IGenericDispService<MacAddressLogDTO, MacAddressLog,String> genericDispService) {
+    public MacAddressLogController(@Qualifier("MacAddressLog") IGenericDispService<MacAddressLogDTO, MacAddressLog,String> genericDispService,ModelMapper modelMapper) {
         this.genericDispService = genericDispService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping
@@ -35,6 +43,16 @@ public class MacAddressLogController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(listaLogs);
+    }
+
+    @GetMapping("/{sede}")
+    @Operation(summary = "Obtener Logs por sede",description = "Muestra una lista de Logs filtrados por el nombre de la sede.")
+    public ResponseEntity<List<MacAddressLogDTO>> findBySede(@Parameter(description = "Nombre de la sede de los logs que se desean encontrar")@PathVariable String sede ){
+        Optional<List<MacAddressLogDTO>> listaLogsSede = genericDispService.findBySede(sede);
+        if (!listaLogsSede.isEmpty()){
+            return ResponseEntity.ok().body(listaLogsSede.get());
+        }
+        return ResponseEntity.noContent().build();
     }
 
 

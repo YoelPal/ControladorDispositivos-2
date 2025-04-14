@@ -1,5 +1,6 @@
 package practica.ControladorDispositivos.services.impl;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import practica.ControladorDispositivos.models.dto.ApDTO;
 import practica.ControladorDispositivos.models.entities.Ap;
@@ -15,29 +16,31 @@ import java.util.stream.Collectors;
 public class ApServiceImpl implements IGenericDispService<ApDTO,Ap,String> {
     private final ApRepository apRepository;
     private final IDtoConverterService dtoConverterService;
+    private final ModelMapper modelMapper;
 
-    public ApServiceImpl(ApRepository apRepository, IDtoConverterService dtoConverterService) {
+    public ApServiceImpl(ApRepository apRepository, IDtoConverterService dtoConverterService, ModelMapper modelMapper) {
         this.apRepository = apRepository;
         this.dtoConverterService = dtoConverterService;
+        this.modelMapper = modelMapper;
     }
 
     @Override
     public List<ApDTO> findAll() {
         return apRepository.findAll()
                 .stream()
-                .map(dtoConverterService::converToApDTO)
+                .map(entity->(modelMapper.map(entity, ApDTO.class)))
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<ApDTO> findById(String mac) {
-        return apRepository.findById(mac).map(dtoConverterService::converToApDTO);
+        return apRepository.findById(mac).map(entity->modelMapper.map(entity, ApDTO.class));
     }
 
     @Override
     public ApDTO save(Ap entity) {
         Ap savedAp =  apRepository.save(entity);
-        return dtoConverterService.converToApDTO(savedAp);
+        return modelMapper.map(savedAp, ApDTO.class);
     }
 
     @Override
@@ -57,5 +60,16 @@ public class ApServiceImpl implements IGenericDispService<ApDTO,Ap,String> {
             return Optional.of(dtoConverterService.converToApDTO(updatedAp)) ;
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<ApDTO>> findBySede(String sede) {
+        List<ApDTO> apDTOList =apRepository.findBySede(sede).stream()
+                .map(entity->modelMapper.map(entity, ApDTO.class))
+                .toList();
+        if (apDTOList.isEmpty()){
+            return Optional.empty();
+        }
+        return Optional.of(apDTOList);
     }
 }

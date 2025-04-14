@@ -70,4 +70,15 @@ public class DispositivoServiceImpl implements IGenericDispService<DispositivoDT
         }
         return Optional.empty();
     }
+
+    @Override
+    public Optional<List<DispositivoDTO>> findBySede(String sede) {
+        List<DispositivoDTO> dispositivoDTOList = dispositivoRepository.findBySede(sede).stream()
+                .map(dtoConverterService::converToDispositivoDTO)
+                .toList();
+        if (dispositivoDTOList.isEmpty()){
+            return Optional.empty();
+        }
+        return Optional.of(dispositivoDTOList);
+    }
 }

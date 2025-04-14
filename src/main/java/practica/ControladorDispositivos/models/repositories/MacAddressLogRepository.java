@@ -16,4 +16,8 @@ public interface MacAddressLogRepository extends JpaRepository<MacAddressLog, St
     @Query("select l.macAddress from MacAddressLog l left join Dispositivo d on l.macAddress = d.macAddress where l.macAddress is null")
     List<String> listaMAcsNoRegistrados();
 
+    List<MacAddressLog> findBySede(String sede);
+
+
+
 }

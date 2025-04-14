@@ -6,9 +6,6 @@ import practica.ControladorDispositivos.models.dto.MacAddressLogDTO;
 import practica.ControladorDispositivos.models.entities.MacAddressLog;
 import practica.ControladorDispositivos.models.repositories.MacAddressLogRepository;
 import practica.ControladorDispositivos.services.IGenericDispService;
-import practica.ControladorDispositivos.services.dtoConverter.DtoConverterService;
-import practica.ControladorDispositivos.services.dtoConverter.IDtoConverterService;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,12 +14,10 @@ import java.util.stream.Collectors;
 public class MacAddressLogServiceImpl implements IGenericDispService<MacAddressLogDTO,MacAddressLog, String> {
 
     private final MacAddressLogRepository macAddressLogRepository;
-    private final IDtoConverterService dtoConverterService;
     private final ModelMapper modelMapper;
 
-    public MacAddressLogServiceImpl(MacAddressLogRepository macAddressLogRepository, DtoConverterService dtoConverterService, ModelMapper modelMapper) {
+    public MacAddressLogServiceImpl(MacAddressLogRepository macAddressLogRepository,ModelMapper modelMapper) {
         this.macAddressLogRepository = macAddressLogRepository;
-        this.dtoConverterService = dtoConverterService;
         this.modelMapper = modelMapper;
     }
 
@@ -43,7 +38,7 @@ public class MacAddressLogServiceImpl implements IGenericDispService<MacAddressL
     @Override
     public MacAddressLogDTO save(MacAddressLog macAddressLog) {
         MacAddressLog savedLog = macAddressLogRepository.save(macAddressLog);
-        return dtoConverterService.convertToMacAddressLogDTO(savedLog);
+        return modelMapper.map(savedLog, MacAddressLogDTO.class);
     }
 
     @Override
@@ -53,6 +48,18 @@ public class MacAddressLogServiceImpl implements IGenericDispService<MacAddressL
 
     @Override
     public Optional<MacAddressLogDTO> update(MacAddressLog macAddressLog) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<MacAddressLogDTO>> findBySede(String sede){
+        List<MacAddressLogDTO> listaLogs = macAddressLogRepository.findBySede(sede)
+                .stream()
+                .map(entity->modelMapper.map(entity,MacAddressLogDTO.class))
+                .toList();
+        if (!listaLogs.isEmpty()){
+            return Optional.of(listaLogs);
+        }
         return Optional.empty();
     }
 }

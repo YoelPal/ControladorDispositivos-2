@@ -15,13 +15,15 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 @Service
 public class CsvParserService {
-    private static final char CSV_SEPARATOR = '|';
     private static final Logger LOGGER = LoggerFactory.getLogger(CsvParserService.class);
 
+    @Value("${csv.separator}")
+    private char csvSeparator;
 
     @Value("${csv.header.vlan}")
     private String headerVlan;
@@ -51,14 +53,6 @@ public class CsvParserService {
     @Value("#{'${cabeceras.requeridas}'.split(',')}")
     private List<String> cabecerasRequeridas;
 
-    List<DateTimeFormatter> formatters = Arrays.asList(
-            DateTimeFormatter.ISO_LOCAL_DATE_TIME, // Formato con 'T'
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"), // Formato con espacio
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"), // Formato con milisegundos y 'Z'
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"), // Formato con espacio y milisegundos
-            DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss") // Otro formato posible
-    );
-
     public List<MacAddressLog> CsvValoresPorCabeceras(MultipartFile file) {
         Map<String, Integer> cabecerasMap = new HashMap<>();
         List<MacAddressLog> macAddressLogs = new ArrayList<>();
@@ -66,8 +60,8 @@ public class CsvParserService {
         try (Reader reader = new InputStreamReader(file.getInputStream(),StandardCharsets.UTF_8)) {
 
             CSVParser parser = new CSVParserBuilder()
-                    .withSeparator(CSV_SEPARATOR)
-                    // .withIgnoreQuotations(false) // Asegúrate que maneje comillas si es necesario (false es default)
+                    .withSeparator(csvSeparator)
+                    // .withIgnoreQuotations(false) // Para que maneje comillas si es necesario (false es default)
                     .build();
 
             try (CSVReader csvReader = new CSVReaderBuilder(reader)
@@ -110,21 +104,8 @@ public class CsvParserService {
                     String hostname = obtenerValor(datosTotales,cabecerasMap,headerHostname);
                     String directorio = obtenerValor(datosTotales,cabecerasMap,headerDirectorio);
 
-                    LocalDateTime parsedTimestamp = null;
-                    /*if (timestampStr != null) {
-                        boolean parsed = false;
-                        for (DateTimeFormatter format : formatters) {
-                            try {
-                                parsedTimestamp = LocalDateTime.parse(timestampStr, format);
-                                parsed = true;
-                                break;
-                            } catch (DateTimeParseException e) {
-                            }
-                        }
-                        if (!parsed) {
-                            LOGGER.warn("Línea {}: Valor de timestamp no encontrado o vacío.", numeroLinea);
-                        }
-                    }*/
+
+
 
                    if (mac != null) {
                         MacAddressLog log = MacAddressLog.builder()
@@ -168,4 +149,37 @@ public class CsvParserService {
         }
         return null; // Retorna null si la cabecera no se encontró o el índice está fuera de rango para esa fila
     }
+
+    private LocalDateTime timestampPased(String timestamp){
+        List<DateTimeFormatter> formatters = Arrays.asList(
+                DateTimeFormatter.ISO_LOCAL_DATE_TIME, // Formato con 'T'
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"), // Formato con espacio
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"), // Formato con milisegundos y 'Z'
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"), // Formato con espacio y milisegundos
+                DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss") // Otro formato posible
+        );
+        LocalDateTime parsedTimestamp = null;
+
+        if (timestamp != null) {
+                        boolean parsed = false;
+                        for (DateTimeFormatter format : formatters) {
+                            try {
+                                parsedTimestamp = LocalDateTime.parse(timestamp, format);
+                                parsed = true;
+
+                                break;
+                            } catch (DateTimeParseException e) {
+                                LOGGER.warn("Error al pasear el timestamp");
+                            }
+                        }
+                        if (!parsed) {
+                            LOGGER.warn("Valor de timestamp no encontrado o vacío.");
+                        }
+                    }
+        return parsedTimestamp;
+
+
+    }
+
+
 }

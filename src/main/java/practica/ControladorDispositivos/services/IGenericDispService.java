@@ -9,4 +9,5 @@ public interface IGenericDispService<T,D, ID> {
     T save(D entity);
     boolean deleteById(ID id);
     Optional<T> update(D entity);
+    Optional<List<T>> findBySede(ID sede);
 }

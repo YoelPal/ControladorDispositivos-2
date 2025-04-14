@@ -58,4 +58,21 @@ public class DispositivoController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/sede/{sede}")
+    @Operation(summary = "Busca dispositivo por su sede", description = "Muestra una lista de dispositivos con la misma sede.")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "404", description = "Dispositivos no enconstrados con esa sede."),
+            @ApiResponse(responseCode = "200", description = "Lista encontrada.")
+    })
+    public ResponseEntity<List<DispositivoDTO>> findBySede(@Parameter(description = "Sede de los dispositivos")@PathVariable String sede){
+        Optional<List<DispositivoDTO>> dispositivoDTOList = genericDispService.findBySede(sede);
+        if (dispositivoDTOList.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(dispositivoDTOList.get());
+    }
+
+
+
 }

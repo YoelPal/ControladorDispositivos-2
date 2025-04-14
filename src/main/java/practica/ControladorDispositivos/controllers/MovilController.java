@@ -2,12 +2,15 @@ package practica.ControladorDispositivos.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import practica.ControladorDispositivos.models.dto.DispositivoDTO;
 import practica.ControladorDispositivos.models.dto.MovilDTO;
 import practica.ControladorDispositivos.models.entities.Movil;
 import practica.ControladorDispositivos.services.IGenericDispService;
@@ -60,5 +63,19 @@ public class MovilController {
             return ResponseEntity.ok( movilService.update(movil));
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/sede/{sede}")
+    @Operation(summary = "Busca Moviles por su sede", description = "Muestra una lista de moviles con la misma sede.")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "404", description = "Moviles no enconstrados con esa sede."),
+            @ApiResponse(responseCode = "200", description = "Lista encontrada.")
+    })
+    public ResponseEntity<List<MovilDTO>> findBySede(@Parameter(description = "Sede de los moviles")@PathVariable String sede){
+        Optional<List<MovilDTO>> dispositivoDTOList = movilService.findBySede(sede);
+        if (dispositivoDTOList.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(dispositivoDTOList.get());
     }
 }
