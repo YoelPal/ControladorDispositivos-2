@@ -7,9 +7,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import practica.ControladorDispositivos.models.dto.DispositivoDTO;
 import practica.ControladorDispositivos.models.dto.TabletDTO;
 import practica.ControladorDispositivos.models.entities.Tablet;
 import practica.ControladorDispositivos.services.IGenericDispService;
@@ -35,7 +35,7 @@ public class TabletController {
         if (listaTabets.isEmpty()){
             return ResponseEntity.noContent().build();
         }
-       return ResponseEntity.ok(tabletService.findAll());
+       return ResponseEntity.ok(listaTabets);
     }
 
     @PostMapping
@@ -45,7 +45,7 @@ public class TabletController {
             return ResponseEntity.badRequest().body("La dirección MAC ya está asignada");
         }
         Tablet tablet = modelMapper.map(tabletDTO, Tablet.class);
-        return ResponseEntity.ok(tabletService.save(tablet)) ;
+        return ResponseEntity.status(HttpStatus.CREATED).body(tabletService.save(tablet));
     }
 
     @PutMapping("/{macAddress}")
@@ -77,5 +77,4 @@ public class TabletController {
         }
         return ResponseEntity.ok(dispositivoDTOList.get());
     }
-
 }
