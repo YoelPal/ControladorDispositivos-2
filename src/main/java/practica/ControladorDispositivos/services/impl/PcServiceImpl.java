@@ -34,8 +34,8 @@ public class PcServiceImpl implements IGenericDispService<PcDTO,Pc,String> {
     }
 
     @Override
-    public Optional<PcDTO> findById(String mac) {
-        return pcRepository.findById(mac).map(entity->modelMapper.map(entity, PcDTO.class));
+    public Optional<PcDTO> findById(String macAddress) {
+        return pcRepository.findById(macAddress).map(entity->modelMapper.map(entity, PcDTO.class));
     }
 
     @Override

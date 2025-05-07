@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import practica.ControladorDispositivos.models.dto.ApDTO;
 import practica.ControladorDispositivos.models.dto.DispositivoDTO;
 import practica.ControladorDispositivos.models.entities.Ap;
+import practica.ControladorDispositivos.models.entities.Dispositivo;
 import practica.ControladorDispositivos.services.IGenericDispService;
 
 import java.util.List;
@@ -24,10 +25,12 @@ import java.util.Optional;
 public class ApController {
     private final IGenericDispService<ApDTO,Ap,String> apService;
     private final ModelMapper modelMapper;
+    private final IGenericDispService<DispositivoDTO, Dispositivo,String> dispService;
 
-    public ApController(@Qualifier("ap") IGenericDispService<ApDTO, Ap, String> apService, ModelMapper modelMapper) {
+    public ApController(@Qualifier("ap") IGenericDispService<ApDTO, Ap, String> apService, ModelMapper modelMapper,@Qualifier("dispositivo") IGenericDispService<DispositivoDTO, Dispositivo, String> dispService) {
         this.apService = apService;
         this.modelMapper = modelMapper;
+        this.dispService = dispService;
     }
 
     @GetMapping
@@ -42,9 +45,9 @@ public class ApController {
 
     @PostMapping
     @Operation(summary = "Guarda un nuevo dispositivo Ap", description = "Guarda un dispositivo Ap nuevo con su dirección MAC. ")
-    public ResponseEntity<?> saveAp(@Parameter(description = "Objeto Ap en formato JASON.") @RequestBody ApDTO apDTO){
-        if (apService.findById(apDTO.getMacAddress()).isPresent()){
-            return ResponseEntity.badRequest().body("La dirección MAC ya está asignada");
+    public ResponseEntity<?> saveAp(@Parameter(description = "Objeto Ap en formato JSON.") @RequestBody ApDTO apDTO){
+        if (dispService.findById(apDTO.getMacAddress()).isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("La dirección MAC ya está asignada");
         }
         Ap ap = modelMapper.map(apDTO,Ap.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(apService.save(ap));
@@ -69,7 +72,7 @@ public class ApController {
     @GetMapping("/sede/{sede}")
     @Operation(summary = "Busca Ap por su sede", description = "Muestra una lista de Aps con la misma sede.")
     @ApiResponses(value ={
-            @ApiResponse(responseCode = "404", description = "Aps no enconstrados con esa sede."),
+            @ApiResponse(responseCode = "404", description = "Aps no encontrados con esa sede."),
             @ApiResponse(responseCode = "200", description = "Lista encontrada.")
     })
     public ResponseEntity<List<ApDTO>> findBySede(@Parameter(description = "Sede de los dispositivos")@PathVariable String sede){

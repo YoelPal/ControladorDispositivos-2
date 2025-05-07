@@ -33,8 +33,8 @@ public class TabletServiceImpl implements IGenericDispService<TabletDTO,Tablet,S
     }
 
     @Override
-    public Optional<TabletDTO> findById(String mac) {
-        return tabletRepository.findById(mac).map(entity->modelMapper.map(entity, TabletDTO.class));
+    public Optional<TabletDTO> findById(String macAddress) {
+        return tabletRepository.findById(macAddress).map(entity->modelMapper.map(entity, TabletDTO.class));
     }
 
     @Override

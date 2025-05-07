@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/moviles")
+@RequestMapping("/movil")
 @Tag(name = "Movil", description = "Dispositivos moviles almacenados por MAC")
 public class MovilController {
 
@@ -42,8 +42,9 @@ public class MovilController {
     @PostMapping
     @Operation(summary = "Guarda un dispositivo movil", description = "Guarda un dispositivo móvil a partir de un archivo JASON")
     public ResponseEntity<?> saveMovil(@Parameter(description = "Objeto Movil en formato JASON.") @RequestBody MovilDTO movilDTO){
-        if (movilService.findById(movilDTO.getMacAddress()).isPresent()){
-            return ResponseEntity.badRequest().body("La dirección MAC ya está asignada");
+        Optional<MovilDTO> movilDTOOptional = movilService.findById(movilDTO.getMacAddress());
+        if (movilDTOOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("La dirección MAC ya está asignada");
         }
         Movil movil = modelMapper.map(movilDTO,Movil.class);
        return ResponseEntity.status(HttpStatus.CREATED).body(movilService.save(movil));

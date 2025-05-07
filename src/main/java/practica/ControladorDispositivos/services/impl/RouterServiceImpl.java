@@ -34,8 +34,8 @@ public class RouterServiceImpl implements IGenericDispService<RouterDTO,Router,S
     }
 
     @Override
-    public Optional<RouterDTO> findById(String mac) {
-        return routerRepository.findById(mac).map(entity->modelMapper.map(entity, RouterDTO.class));
+    public Optional<RouterDTO> findById(String macAddress) {
+        return routerRepository.findById(macAddress).map(entity->modelMapper.map(entity, RouterDTO.class));
     }
 
     @Override

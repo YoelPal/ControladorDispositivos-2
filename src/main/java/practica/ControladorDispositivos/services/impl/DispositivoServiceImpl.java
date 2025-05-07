@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service("Dispositivo")
+@Service("dispositivo")
 public class DispositivoServiceImpl implements IGenericDispService<DispositivoDTO,Dispositivo,String> {
     private final DispositivoRepository dispositivoRepository;
     private final IDtoConverterService dtoConverterService;
@@ -24,11 +24,6 @@ public class DispositivoServiceImpl implements IGenericDispService<DispositivoDT
         this.modelMapper = modelMapper;
     }
 
-    /*@Override
-    public List<Dispositivo> findAll() {
-        return dispositivoRepository.findAll();
-    }*/
-
     @Override
     public List<DispositivoDTO> findAll(){
 
@@ -39,8 +34,8 @@ public class DispositivoServiceImpl implements IGenericDispService<DispositivoDT
     }
 
     @Override
-    public Optional<DispositivoDTO> findById(String mac) {
-        Optional<DispositivoDTO> dispositivoOpt = dispositivoRepository.findById(mac).map(dtoConverterService::converToDispositivoDTO);
+    public Optional<DispositivoDTO> findById(String macAddress) {
+        Optional<DispositivoDTO> dispositivoOpt = dispositivoRepository.findById(macAddress).map(dtoConverterService::converToDispositivoDTO);
         return dispositivoOpt;
     }
 

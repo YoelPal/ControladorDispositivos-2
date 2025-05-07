@@ -16,21 +16,29 @@ public class DtoConverterService implements IDtoConverterService{
 
     @Override
     public DispositivoDTO converToDispositivoDTO(Dispositivo dispositivo) {
+        DispositivoDTO dto;
         if (dispositivo instanceof Movil) {
-            return modelMapper.map(dispositivo, MovilDTO.class);
+            dto = modelMapper.map(dispositivo, MovilDTO.class);
+            dto.setTipoDispositivo("Movil");
         } else if (dispositivo instanceof Pc) {
-            return modelMapper.map(dispositivo, PcDTO.class);
+            dto = modelMapper.map(dispositivo, PcDTO.class);
+            dto.setTipoDispositivo("Pc");
         } else if (dispositivo instanceof Router) {
-            return modelMapper.map(dispositivo, RouterDTO.class);
+            dto =  modelMapper.map(dispositivo, RouterDTO.class);
+            dto.setTipoDispositivo("Router");
         } else if (dispositivo instanceof Switch) {
-            return modelMapper.map(dispositivo, SwitchDTO.class);
+            dto = modelMapper.map(dispositivo, SwitchDTO.class);
+            dto.setTipoDispositivo("Switch");
         } else if (dispositivo instanceof Tablet) {
-            return modelMapper.map(dispositivo, TabletDTO.class);
+            dto = modelMapper.map(dispositivo, TabletDTO.class);
+            dto.setTipoDispositivo("Tablet");
         } else if (dispositivo instanceof Ap) {
-            return modelMapper.map(dispositivo, ApDTO.class);
+            dto = modelMapper.map(dispositivo, ApDTO.class);
+            dto.setTipoDispositivo("Ap");
         } else {
             return modelMapper.map(dispositivo, DispositivoDTO.class);
         }
+        return dto;
     }
 
     @Override
@@ -60,6 +68,7 @@ public class DtoConverterService implements IDtoConverterService{
 
     @Override
     public ApDTO converToApDTO(Ap ap) {
+
         return modelMapper.map(ap,ApDTO.class);
     }
 

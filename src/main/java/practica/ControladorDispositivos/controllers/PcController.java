@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import practica.ControladorDispositivos.models.dto.DispositivoDTO;
 import practica.ControladorDispositivos.models.dto.PcDTO;
 import practica.ControladorDispositivos.models.entities.Pc;
 import practica.ControladorDispositivos.services.IGenericDispService;
@@ -43,7 +42,7 @@ public class PcController {
     @Operation(summary = "Guarda un Pc nuevo.", description = "Permite guardar un objeto Pc nuevo con su MAC")
     public ResponseEntity<?> savePc(@Parameter(description = "Objeto PC en formato JSON")@RequestBody PcDTO pcDTO){
         if (pcService.findById(pcDTO.getMacAddress()).isPresent()){
-            return ResponseEntity.badRequest().body("La dirección MAC ya está asignada");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("La dirección MAC ya está asignada");
         }
         Pc pc = modelMapper.map(pcDTO, Pc.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(pcService.save(pc));

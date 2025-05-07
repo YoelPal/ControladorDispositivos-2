@@ -15,18 +15,19 @@ import practica.ControladorDispositivos.auth.usuario.User;
 public class Token {
 
     public enum TokenType{
-        BEARER
+        BEARER,
+        REFRESH
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
     @Column(unique = true)
     public String token;
 
     @Enumerated(EnumType.STRING)
-    public TokenType tokenType = TokenType.BEARER;
+    public TokenType tokenType ;
 
     public boolean revoked;
 

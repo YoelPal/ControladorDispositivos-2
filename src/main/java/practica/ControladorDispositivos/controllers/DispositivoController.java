@@ -22,7 +22,7 @@ public class DispositivoController {
     private final IGenericDispService<DispositivoDTO, Dispositivo, String> genericDispService;
 
 
-    public DispositivoController(@Qualifier("Dispositivo") IGenericDispService<DispositivoDTO, Dispositivo, String> dispositivoService) {
+    public DispositivoController(@Qualifier("dispositivo") IGenericDispService<DispositivoDTO, Dispositivo, String> dispositivoService) {
         this.genericDispService = dispositivoService;
 
     }

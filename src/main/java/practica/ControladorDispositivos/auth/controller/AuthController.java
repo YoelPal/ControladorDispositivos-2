@@ -5,11 +5,17 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import practica.ControladorDispositivos.auth.repository.Token;
 import practica.ControladorDispositivos.auth.service.AuthService;
+import practica.ControladorDispositivos.auth.usuario.User;
+import practica.ControladorDispositivos.auth.usuario.UserRepository;
+
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -18,12 +24,22 @@ import practica.ControladorDispositivos.auth.service.AuthService;
 public class AuthController {
 
     private final AuthService service;
+    private final UserRepository userRepository;
 
     @PostMapping("/register")
     @Operation(summary = "Registro de nuevos usuarios", description = "Permite crear nuevos usuarios, se necesita rol de ADMIN. Devuelve token de autorización y de refresco.")
-    public ResponseEntity<TokenResponse> register(@Parameter(description = "Archivo JSON con el nuevo usuario") @RequestBody final RegisterRequest request){
+    public ResponseEntity<?> register(@Parameter(description = "Archivo JSON con el nuevo usuario") @RequestBody final RegisterRequest request){
+        Optional<User> userOptional = userRepository.findByNombre(request.nombre());
+        if (userOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "Ya existe un usuario con ese nombre"));
+        }
+        if (userRepository.existsByEmail(request.email())){
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "Ya existe un usuario con ese email"));
+        }
         final TokenResponse token = service.register(request);
-        return ResponseEntity.ok(token);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/login")
@@ -35,9 +51,11 @@ public class AuthController {
 
     @PostMapping("/refresh")
     @Operation(summary = "Refrescar Autorización", description = "Permite refrescar el token de autoriación. Devuelve token de autorización y de refresco.")
-    public TokenResponse refresh(@Parameter(description = "Cabecera de autorizacion. Bearer {token}") @RequestHeader(HttpHeaders.AUTHORIZATION)final String authHeader){
-        return service.refreshToken(authHeader);
+    public TokenResponse refresh(@Parameter(description = "token de refesco") @RequestBody final String refreshToken){
+        return service.refreshToken(refreshToken);
     }
+
+
 
 
 }

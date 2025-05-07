@@ -3,6 +3,8 @@ package practica.ControladorDispositivos.auth.service;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +19,7 @@ import practica.ControladorDispositivos.auth.usuario.User;
 import practica.ControladorDispositivos.auth.usuario.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +40,8 @@ public class AuthService {
         var savedUSer = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(savedUSer,jwtToken);
+        saveUserToken(savedUSer,jwtToken, Token.TokenType.BEARER);
+        saveUserToken(user, refreshToken, Token.TokenType.REFRESH);
         return new TokenResponse(jwtToken,refreshToken);
     }
 
@@ -53,43 +57,56 @@ public class AuthService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
-        saveUserToken(user,jwtToken);
+        saveUserToken(user,jwtToken, Token.TokenType.BEARER);
+        saveUserToken(user, refreshToken, Token.TokenType.REFRESH);
         return new TokenResponse(jwtToken, refreshToken);
     }
 
-    public TokenResponse refreshToken(final String autHeader){
-        if (autHeader == null || !autHeader.startsWith("Bearer ")){
-            throw new IllegalArgumentException("Invalid Bearer token");
+    public TokenResponse refreshToken(final String refreshToken){
+        if (refreshToken == null|| refreshToken.isEmpty() ){
+            throw new IllegalArgumentException("Invalid Refresh token");
         }
 
-        final String refreshToken = autHeader.substring(7);
         final String userName = jwtService.extractUsername(refreshToken);
 
-        if (userName == null){
-            throw new IllegalArgumentException("Invalid refresh token.");
+        if (userName == null || userName.isEmpty()){
+            throw new IllegalArgumentException("Invalid User token.");
         }
 
         final User user = userRepository.findByNombre(userName)
                 .orElseThrow(()->new UsernameNotFoundException(userName));
 
+        var storedRefreshToken = tokenRepository.findByTokenAndTokenType(refreshToken, Token.TokenType.REFRESH)
+                .orElseThrow(() -> new IllegalArgumentException("Refresh token not found in database."));
+        boolean revoked = storedRefreshToken.isRevoked();
+        boolean expired = storedRefreshToken.isExpired();
+        String Username= storedRefreshToken.getUser().getNombre();
+
+
+        if (revoked||expired|| !userName.equals(user.getNombre())){
+            throw new IllegalArgumentException("Invalid refresh token.");
+        }
+
         if (!jwtService.isTokenValid(refreshToken,user)){
             throw new IllegalArgumentException("Invalid refresh token.");
         }
 
+        var newRefreshToken = jwtService.generateRefreshToken(user);
         final String accessToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
-        saveUserToken(user,accessToken);
-        return new TokenResponse(accessToken,refreshToken);
+        saveUserToken(user,accessToken, Token.TokenType.BEARER);
+        saveUserToken(user,newRefreshToken, Token.TokenType.REFRESH);
+        return new TokenResponse(accessToken,newRefreshToken);
 
     }
 
 
 
-    private void saveUserToken(User user, String jwtToken){
+    private void saveUserToken(User user, String jwtToken, Token.TokenType tokenType){
         var token = Token.builder()
                 .user(user)
                 .token(jwtToken)
-                .tokenType(Token.TokenType.BEARER)
+                .tokenType(tokenType)
                 .expired(false)
                 .revoked(false)
                 .build();
@@ -100,8 +117,23 @@ public class AuthService {
         final List<Token> validUserToken = tokenRepository.findAllValidTokenByUser(user.getId());
         if (!validUserToken.isEmpty()){
             for (final Token token: validUserToken){
-                token.setRevoked(true);
-                token.setExpired(true);
+                    token.setRevoked(true);
+                    token.setExpired(true);
+                }
+
+            }
+            tokenRepository.saveAll(validUserToken);
+    }
+
+    private void revokeUserRefreshTokens(final User user){
+        final List<Token> validUserToken = tokenRepository.findAllValidTokenByUser(user.getId());
+        if (!validUserToken.isEmpty()){
+            for (final Token token: validUserToken){
+                if ( token.tokenType.equals(Token.TokenType.REFRESH)){
+                    token.setRevoked(true);
+                    token.setExpired(true);
+                }
+
             }
             tokenRepository.saveAll(validUserToken);
         }
@@ -125,7 +157,9 @@ public class AuthService {
             User savedAdmin = userRepository.save(adminUser);
             var jwtToken = jwtService.generateToken(adminUser);
             var refreshToken = jwtService.generateRefreshToken(adminUser);
-            saveUserToken(savedAdmin,jwtToken);
+            saveUserToken(savedAdmin,jwtToken, Token.TokenType.BEARER);
+            saveUserToken(savedAdmin,refreshToken, Token.TokenType.REFRESH);
+
         }
     }
 }

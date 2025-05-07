@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import practica.ControladorDispositivos.models.dto.DispositivoDTO;
@@ -42,7 +43,7 @@ public class SwitchController {
     @Operation(summary = "Guarda un Switch nuevo.", description = "Permite guardar un objeto Switch nuevo con su MAC")
     public ResponseEntity<?> saveSwitch(@Parameter(description = "Objeto Switch en formato JSON") @RequestBody SwitchDTO switchDTO){
         if (switchService.findById(switchDTO.getMacAddress()).isPresent()){
-            return ResponseEntity.badRequest().body("La dirección MAC ya está asiganda.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("La dirección MAC ya está asiganda.");
         }
         Switch switchA = modelMapper.map(switchDTO, Switch.class);
         return ResponseEntity.ok(switchService.save(switchA));

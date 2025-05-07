@@ -30,9 +30,10 @@ public class MovilServiceImpl implements IGenericDispService<MovilDTO,Movil,Stri
     }
 
     @Override
-    public Optional<MovilDTO> findById(String mac) {
+    public Optional<MovilDTO> findById(String macAddress) {
+        Optional<Movil> movilOptional = movilRepository.findById(macAddress);
 
-        return movilRepository.findById(mac).map(movil->modelMapper.map(movil, MovilDTO.class));
+        return movilOptional.map(movil ->modelMapper.map(movil, MovilDTO.class));
     }
 
     @Override

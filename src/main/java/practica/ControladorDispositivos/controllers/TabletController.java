@@ -42,7 +42,7 @@ public class TabletController {
     @Operation(summary = "Guarda una Tablet nueva.", description = "Permite guardar un objeto Tablet nuevo con su MAC")
     public ResponseEntity<?> saveTablet(@Parameter(description = "Objeto Tablet en formato JSON") @RequestBody TabletDTO tabletDTO){
         if (tabletService.findById(tabletDTO.getMacAddress()).isPresent()){
-            return ResponseEntity.badRequest().body("La dirección MAC ya está asignada");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("La dirección MAC ya está asignada");
         }
         Tablet tablet = modelMapper.map(tabletDTO, Tablet.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(tabletService.save(tablet));

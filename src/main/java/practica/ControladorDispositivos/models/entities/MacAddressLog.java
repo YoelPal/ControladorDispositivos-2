@@ -13,14 +13,24 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "logs")
+@Table(name = "logs", indexes = {
+        @Index(name = "idx_mac_address", columnList = "mc_address"),
+        @Index(name = "idx_timestamp", columnList = "timestamp"),
+        @Index(name = "idx_sede", columnList = "sede"),
+        @Index(name = "idx_ip_switch", columnList = "ip_switch"),
+        @Index(name = "idx_vlan", columnList = "vlan"),
+        @Index(name = "idx_puerto", columnList = "puerto"),
+        @Index(name = "idx_mac_sede", columnList = "mc_address, sede"),
+        @Index(name = "idx_ip_switch_puerto", columnList = "ip_switch, puerto")
+        // ... otros índices compuestos según tus patrones de consulta
+})
 
 public class MacAddressLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "mc_address")
+    @Column(name = "mc_address", unique = true)
     private String macAddress;
 
     @Column(name = "timestamp")

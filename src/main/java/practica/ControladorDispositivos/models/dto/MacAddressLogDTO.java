@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class MacAddressLogDTO {
+    private Long id;
     private String macAddress;
     private LocalDateTime timestamp;
     private String sede;

@@ -33,8 +33,8 @@ public class SwitchServiceImpl implements IGenericDispService<SwitchDTO,Switch,S
     }
 
     @Override
-    public Optional<SwitchDTO> findById(String mac) {
-        return switchRepository.findById(mac).map(entity->modelMapper.map(entity, SwitchDTO.class));
+    public Optional<SwitchDTO> findById(String macAddress) {
+        return switchRepository.findById(macAddress).map(entity->modelMapper.map(entity, SwitchDTO.class));
     }
 
     @Override

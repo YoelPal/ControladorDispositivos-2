@@ -33,8 +33,8 @@ public class ApServiceImpl implements IGenericDispService<ApDTO,Ap,String> {
     }
 
     @Override
-    public Optional<ApDTO> findById(String mac) {
-        return apRepository.findById(mac).map(entity->modelMapper.map(entity, ApDTO.class));
+    public Optional<ApDTO> findById(String macAddress) {
+        return apRepository.findById(macAddress).map(entity->modelMapper.map(entity, ApDTO.class));
     }
 
     @Override
