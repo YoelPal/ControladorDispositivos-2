@@ -1,6 +1,6 @@
 package practica.ControladorDispositivos.services.impl;
 
-import org.modelmapper.ModelMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import practica.ControladorDispositivos.models.dto.*;
 import practica.ControladorDispositivos.models.entities.*;
@@ -10,19 +10,12 @@ import practica.ControladorDispositivos.services.dtoConverter.IDtoConverterServi
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service("dispositivo")
+@RequiredArgsConstructor
 public class DispositivoServiceImpl implements IGenericDispService<DispositivoDTO,Dispositivo,String> {
     private final DispositivoRepository dispositivoRepository;
     private final IDtoConverterService dtoConverterService;
-    private final ModelMapper modelMapper;
-
-    public DispositivoServiceImpl(DispositivoRepository dispositivoRepository, IDtoConverterService dtoConverterService, ModelMapper modelMapper) {
-        this.dispositivoRepository = dispositivoRepository;
-        this.dtoConverterService = dtoConverterService;
-        this.modelMapper = modelMapper;
-    }
 
     @Override
     public List<DispositivoDTO> findAll(){
@@ -35,8 +28,7 @@ public class DispositivoServiceImpl implements IGenericDispService<DispositivoDT
 
     @Override
     public Optional<DispositivoDTO> findById(String macAddress) {
-        Optional<DispositivoDTO> dispositivoOpt = dispositivoRepository.findById(macAddress).map(dtoConverterService::converToDispositivoDTO);
-        return dispositivoOpt;
+        return dispositivoRepository.findById(macAddress).map(dtoConverterService::converToDispositivoDTO);
     }
 
 

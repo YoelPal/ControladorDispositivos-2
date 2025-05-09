@@ -8,7 +8,7 @@ import practica.ControladorDispositivos.models.entities.MacAddressLog;
 import java.util.List;
 
 @Repository
-public interface MacAddressLogRepository extends JpaRepository<MacAddressLog, String> {
+public interface MacAddressLogRepository extends JpaRepository<MacAddressLog, Long> {
 
     @Query("select l from MacAddressLog l left join Dispositivo d on l.macAddress = d.macAddress where d.macAddress is null")
     List<MacAddressLog> listaLogsNoRegistrados();

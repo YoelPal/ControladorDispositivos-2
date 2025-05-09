@@ -3,8 +3,6 @@ package practica.ControladorDispositivos.auth.service;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,9 +15,8 @@ import practica.ControladorDispositivos.auth.repository.Token;
 import practica.ControladorDispositivos.auth.repository.TokenRepository;
 import practica.ControladorDispositivos.auth.usuario.User;
 import practica.ControladorDispositivos.auth.usuario.UserRepository;
-
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor

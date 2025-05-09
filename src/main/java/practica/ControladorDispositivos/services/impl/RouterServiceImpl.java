@@ -6,9 +6,6 @@ import practica.ControladorDispositivos.models.dto.RouterDTO;
 import practica.ControladorDispositivos.models.entities.Router;
 import practica.ControladorDispositivos.models.repositories.RouterRepository;
 import practica.ControladorDispositivos.services.IGenericDispService;
-import practica.ControladorDispositivos.services.dtoConverter.DtoConverterService;
-import practica.ControladorDispositivos.services.dtoConverter.IDtoConverterService;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,12 +13,10 @@ import java.util.stream.Collectors;
 @Service("Router")
 public class RouterServiceImpl implements IGenericDispService<RouterDTO,Router,String> {
     private final RouterRepository routerRepository;
-    private final IDtoConverterService dtoConverterService;
     private final ModelMapper modelMapper;
 
-    public RouterServiceImpl(RouterRepository routerRepository, IDtoConverterService dtoConverterService, ModelMapper modelMapper) {
+    public RouterServiceImpl(RouterRepository routerRepository, ModelMapper modelMapper) {
         this.routerRepository = routerRepository;
-        this.dtoConverterService = dtoConverterService;
         this.modelMapper = modelMapper;
     }
 

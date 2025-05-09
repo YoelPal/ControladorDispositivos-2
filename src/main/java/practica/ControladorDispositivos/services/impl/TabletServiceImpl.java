@@ -6,8 +6,6 @@ import practica.ControladorDispositivos.models.dto.TabletDTO;
 import practica.ControladorDispositivos.models.entities.Tablet;
 import practica.ControladorDispositivos.models.repositories.TabletRepository;
 import practica.ControladorDispositivos.services.IGenericDispService;
-import practica.ControladorDispositivos.services.dtoConverter.IDtoConverterService;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,12 +13,12 @@ import java.util.stream.Collectors;
 @Service("tablet")
 public class TabletServiceImpl implements IGenericDispService<TabletDTO,Tablet,String> {
     private final TabletRepository tabletRepository;
-    private final IDtoConverterService dtoConverterService;
+  
     private final ModelMapper modelMapper;
 
-    public TabletServiceImpl(TabletRepository tabletRepository, IDtoConverterService dtoConverterService, ModelMapper modelMapper) {
+    public TabletServiceImpl(TabletRepository tabletRepository,ModelMapper modelMapper) {
         this.tabletRepository = tabletRepository;
-        this.dtoConverterService = dtoConverterService;
+       
         this.modelMapper = modelMapper;
     }
 

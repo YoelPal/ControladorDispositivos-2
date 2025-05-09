@@ -6,9 +6,6 @@ import practica.ControladorDispositivos.models.dto.PcDTO;
 import practica.ControladorDispositivos.models.entities.Pc;
 import practica.ControladorDispositivos.models.repositories.PcRepository;
 import practica.ControladorDispositivos.services.IGenericDispService;
-import practica.ControladorDispositivos.services.dtoConverter.DtoConverterService;
-import practica.ControladorDispositivos.services.dtoConverter.IDtoConverterService;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,12 +13,12 @@ import java.util.stream.Collectors;
 @Service("Pc")
 public class PcServiceImpl implements IGenericDispService<PcDTO,Pc,String> {
     private final PcRepository pcRepository;
-    private final IDtoConverterService dtoConverterService;
+   
     private final ModelMapper modelMapper;
 
-    public PcServiceImpl(PcRepository pcRepository, IDtoConverterService dtoConverterService, ModelMapper modelMapper) {
+    public PcServiceImpl(PcRepository pcRepository,ModelMapper modelMapper) {
         this.pcRepository = pcRepository;
-        this.dtoConverterService = dtoConverterService;
+        
         this.modelMapper = modelMapper;
     }
 

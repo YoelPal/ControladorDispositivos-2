@@ -6,8 +6,6 @@ import practica.ControladorDispositivos.models.dto.SwitchDTO;
 import practica.ControladorDispositivos.models.entities.Switch;
 import practica.ControladorDispositivos.models.repositories.SwitchRepository;
 import practica.ControladorDispositivos.services.IGenericDispService;
-import practica.ControladorDispositivos.services.dtoConverter.IDtoConverterService;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,12 +13,10 @@ import java.util.stream.Collectors;
 @Service("switch")
 public class SwitchServiceImpl implements IGenericDispService<SwitchDTO,Switch,String> {
     private final SwitchRepository switchRepository;
-    private final IDtoConverterService dtoConverterService;
     private final ModelMapper modelMapper;
 
-    public SwitchServiceImpl(SwitchRepository switchRepository, IDtoConverterService dtoConverterService, ModelMapper modelMapper) {
+    public SwitchServiceImpl(SwitchRepository switchRepository, ModelMapper modelMapper) {
         this.switchRepository = switchRepository;
-        this.dtoConverterService = dtoConverterService;
         this.modelMapper = modelMapper;
     }
 

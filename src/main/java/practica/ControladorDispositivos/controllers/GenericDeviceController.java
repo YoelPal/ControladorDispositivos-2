@@ -9,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import practica.ControladorDispositivos.models.dto.DispositivoDTO;
+import practica.ControladorDispositivos.models.entities.Dispositivo;
 import practica.ControladorDispositivos.services.IGenericDispService;
 
 import java.util.Collections;
@@ -22,7 +24,7 @@ import java.util.Optional;
 public abstract class GenericDeviceController<DTO, Ent, ID> {
 
     protected final IGenericDispService<DTO, Ent, ID> tipoService;
-    protected final IGenericDispService<DTO, Ent, ID> dispositivoService;
+    protected final IGenericDispService<DispositivoDTO, Dispositivo, ID> dispositivoService;
     protected final ModelMapper mapper;
 
 
@@ -33,6 +35,17 @@ public abstract class GenericDeviceController<DTO, Ent, ID> {
         return list.isEmpty()
                 ? ResponseEntity.ok().body(Collections.emptyList())
                 : ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/{macAddress}")
+    @Operation(summary = "Busca dispositivos por su Mac", description = "Devuelve el dispositivo concreto.")
+    public ResponseEntity<?> findById(@Parameter(description = "Dirección Mac del dispositivo a buscar.")
+                                      @PathVariable ID macAddress )
+    {
+        if (tipoService.findById(macAddress).isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Dispositivo no encontrado con ese ID");
+        }
+        return ResponseEntity.ok(tipoService.findById(macAddress));
     }
 
     @PostMapping

@@ -1,8 +1,7 @@
 package practica.ControladorDispositivos.models.dto;
 
-import jakarta.persistence.Column;
+
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 

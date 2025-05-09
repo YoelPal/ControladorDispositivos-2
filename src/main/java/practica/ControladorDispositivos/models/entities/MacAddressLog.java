@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 public class MacAddressLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "mc_address", unique = true)
     private String macAddress;
