@@ -41,6 +41,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         log.info("Petición a: {}", request.getServletPath());
 
+       if(request.getServletPath().contains("/auth/refresh")){
+           log.info("Ruta para refrescar Token de acceso.");
+           filterChain.doFilter(request, response);
+           return;
+       }
+
         if(request.getServletPath().contains("/auth/login")){
             log.info("Ruta de autenticación, permitiendo sin filtro.");
             filterChain.doFilter(request, response);
@@ -60,6 +66,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         log.info("Nombre de usuario extraído del token: {}", userName);
         if (userName == null || SecurityContextHolder.getContext().getAuthentication() != null){
             log.warn("Nombre de usuario nulo en el token o ya hay autenticación.");
+            filterChain.doFilter(request, response);
             return;
         }
 
@@ -76,6 +83,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         final UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName);
         log.info("UserDetails cargado para el usuario: {}", userDetails.getUsername());
         final Optional<User> user = userRepository.findByNombre(userDetails.getUsername());
+
         if (user.isEmpty()){
             log.error("Usuario no encontrado en UserDetailsService: {}", userName);
             filterChain.doFilter(request,response);

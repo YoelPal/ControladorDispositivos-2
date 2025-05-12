@@ -37,7 +37,8 @@ public class JwtService {
                 .id(user.getId().toString())
                 .claims(Map.of(
                         "mail", user.getEmail(),
-                        "rol", user.getRol()))
+                        "rol", user.getRol(),
+                        "userId",user.getId()))
                 .subject(user.getNombre())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis()+expiration))
@@ -57,6 +58,15 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload();
         return jwtToken.getSubject();
+    }
+
+    public Long extractUserId(final String token){
+        final Claims jwtToken = Jwts.parser()
+                .verifyWith(getSignInKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return jwtToken.get("userId", Long.class);
     }
 
     public boolean isTokenValid(final String token, final User user){

@@ -1,7 +1,9 @@
 package practica.ControladorDispositivos.auth.service;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +19,7 @@ import practica.ControladorDispositivos.auth.usuario.User;
 import practica.ControladorDispositivos.auth.usuario.UserRepository;
 import java.util.List;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -64,32 +66,52 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid Refresh token");
         }
 
-        final String userName = jwtService.extractUsername(refreshToken);
-
-        if (userName == null || userName.isEmpty()){
-            throw new IllegalArgumentException("Invalid User token.");
+        //String userName = null;
+        Long userId = null;
+        try {
+            userId = jwtService.extractUserId(refreshToken);
+            if (userId == null){
+                throw new IllegalArgumentException("Invalid User ID in token.");
+            }
+        } catch (ExpiredJwtException e) {
+            log.error("Refresh token has expired: {}", refreshToken);
+            throw new IllegalArgumentException("Refresh token has expired.");
+        } catch (Exception e) {
+            log.error("Error extracting username from refresh token: {}", refreshToken, e);
+            throw new IllegalArgumentException("Invalid refresh token.");
         }
 
-        final User user = userRepository.findByNombre(userName)
-                .orElseThrow(()->new UsernameNotFoundException(userName));
+        /*if (userName == null || userName.isEmpty()){
+            throw new IllegalArgumentException("Invalid User token.");
+        }*/
 
-        var storedRefreshToken = tokenRepository.findByTokenAndTokenType(refreshToken, Token.TokenType.REFRESH)
+        //String finalUserName = userName;
+        final User user = userRepository.findById(userId)
+                .orElseThrow(()->new UsernameNotFoundException("User not found with this ID"));
+
+        var storedRefreshToken = tokenRepository.findByTokenAndTokenTypeAndUser(refreshToken, Token.TokenType.REFRESH, user)
                 .orElseThrow(() -> new IllegalArgumentException("Refresh token not found in database."));
+
         boolean revoked = storedRefreshToken.isRevoked();
         boolean expired = storedRefreshToken.isExpired();
         String Username= storedRefreshToken.getUser().getNombre();
+        log.info("Is refreshToken revoked: {}, expired: {}, belongs to user: {}", revoked, expired, user.getNombre());
 
 
-        if (revoked||expired|| !userName.equals(user.getNombre())){
+        if (revoked||expired){
+            log.error("Invalid refresh token: revoked={}, expired={}", revoked, expired);
             throw new IllegalArgumentException("Invalid refresh token.");
         }
 
         if (!jwtService.isTokenValid(refreshToken,user)){
+            log.error("Invalid refresh token: JWT signature or claims are invalid for user: {}", user.getNombre());
             throw new IllegalArgumentException("Invalid refresh token.");
         }
 
         var newRefreshToken = jwtService.generateRefreshToken(user);
         final String accessToken = jwtService.generateToken(user);
+        log.info("Generated new accessToken: {}", accessToken); // Añade logging (cuidado con loguear tokens en producción)
+        log.info("Generated new refreshToken: {}", newRefreshToken); // Añade logging (cuidado con loguear tokens en producción)
         revokeAllUserTokens(user);
         saveUserToken(user,accessToken, Token.TokenType.BEARER);
         saveUserToken(user,newRefreshToken, Token.TokenType.REFRESH);

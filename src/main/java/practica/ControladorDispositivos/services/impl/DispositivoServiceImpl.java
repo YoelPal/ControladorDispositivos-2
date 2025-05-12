@@ -1,6 +1,8 @@
 package practica.ControladorDispositivos.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import practica.ControladorDispositivos.models.dto.*;
 import practica.ControladorDispositivos.models.entities.*;
@@ -67,5 +69,10 @@ public class DispositivoServiceImpl implements IGenericDispService<DispositivoDT
             return Optional.empty();
         }
         return Optional.of(dispositivoDTOList);
+    }
+
+    @Override
+    public Page<DispositivoDTO> findAllPaginated(Pageable pageable,String macAddress,String sede, Boolean noCoincidentes) {
+        return dispositivoRepository.findAll(pageable).map(dtoConverterService::converToDispositivoDTO);
     }
 }

@@ -1,6 +1,8 @@
 package practica.ControladorDispositivos.services.impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import practica.ControladorDispositivos.models.dto.ApDTO;
 import practica.ControladorDispositivos.models.entities.Ap;
@@ -72,4 +74,11 @@ public class ApServiceImpl implements IGenericDispService<ApDTO,Ap,String> {
         }
         return Optional.of(apDTOList);
     }
+
+    @Override
+    public Page<ApDTO> findAllPaginated(Pageable pageable, String macAddress, String sede, Boolean noCoincidentes) {
+        return null;
+    }
+
+
 }

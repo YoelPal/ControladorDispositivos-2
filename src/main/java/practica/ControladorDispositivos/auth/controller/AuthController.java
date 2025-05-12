@@ -48,7 +48,8 @@ public class AuthController {
 
     @PostMapping("/refresh")
     @Operation(summary = "Refrescar Autorización", description = "Permite refrescar el token de autoriación. Devuelve token de autorización y de refresco.")
-    public TokenResponse refresh(@Parameter(description = "token de refesco") @RequestBody final String refreshToken){
+    public TokenResponse refresh(@Parameter(description = "JSON con token de refesco") @RequestBody final Map<String, String> requestBody){
+        final String refreshToken = requestBody.get("refreshToken");
         return service.refreshToken(refreshToken);
     }
 

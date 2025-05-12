@@ -1,6 +1,10 @@
 package practica.ControladorDispositivos.models.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import practica.ControladorDispositivos.models.entities.MacAddressLog;
@@ -8,7 +12,7 @@ import practica.ControladorDispositivos.models.entities.MacAddressLog;
 import java.util.List;
 
 @Repository
-public interface MacAddressLogRepository extends JpaRepository<MacAddressLog, Long> {
+public interface MacAddressLogRepository extends JpaRepository<MacAddressLog, Long>, JpaSpecificationExecutor<MacAddressLog> {
 
     @Query("select l from MacAddressLog l left join Dispositivo d on l.macAddress = d.macAddress where d.macAddress is null")
     List<MacAddressLog> listaLogsNoRegistrados();
@@ -17,6 +21,8 @@ public interface MacAddressLogRepository extends JpaRepository<MacAddressLog, Lo
     List<String> listaMAcsNoRegistrados();
 
     List<MacAddressLog> findBySede(String sede);
+
+    Page<MacAddressLog> findAll(Specification<MacAddressLog> spec, Pageable pageable);
 
 
 

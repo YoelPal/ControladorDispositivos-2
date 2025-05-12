@@ -1,13 +1,25 @@
 package practica.ControladorDispositivos.services.impl;
 
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import practica.ControladorDispositivos.models.dto.MacAddressLogDTO;
+import practica.ControladorDispositivos.models.entities.Dispositivo;
 import practica.ControladorDispositivos.models.entities.MacAddressLog;
 import practica.ControladorDispositivos.models.repositories.MacAddressLogRepository;
+import practica.ControladorDispositivos.models.repositories.specification.MacAddressLogSpecs;
 import practica.ControladorDispositivos.services.IGenericDispService;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import java.util.stream.Collectors;
 
 @Service("MacAddressLog")
@@ -62,4 +74,21 @@ public class MacAddressLogServiceImpl implements IGenericDispService<MacAddressL
         }
         return Optional.empty();
     }
+
+    @Override
+    public Page<MacAddressLogDTO> findAllPaginated(Pageable pageable, String macAddress, String sede, Boolean noCoincidentes) {
+
+            Specification<MacAddressLog> spec =
+                    Specification.where(MacAddressLogSpecs.macContaining(macAddress))
+                            .and(MacAddressLogSpecs.sedeContaining(sede));
+
+            if (Boolean.TRUE.equals(noCoincidentes)) {
+                spec = spec.and(MacAddressLogSpecs.noCoincidentesPorMac());
+            }
+
+            return macAddressLogRepository
+                    .findAll(spec, pageable)
+                    .map(log -> modelMapper.map(log, MacAddressLogDTO.class));
+        }
+
 }

@@ -1,6 +1,8 @@
 package practica.ControladorDispositivos.services.impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import practica.ControladorDispositivos.models.dto.TabletDTO;
 import practica.ControladorDispositivos.models.entities.Tablet;
@@ -71,4 +73,11 @@ public class TabletServiceImpl implements IGenericDispService<TabletDTO,Tablet,S
         }
         return Optional.of(tabletDTOList);
     }
+
+    @Override
+    public Page<TabletDTO> findAllPaginated(Pageable pageable, String macAddress, String sede, Boolean noCoincidentes) {
+        return null;
+    }
+
+
 }

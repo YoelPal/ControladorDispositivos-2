@@ -1,6 +1,8 @@
 package practica.ControladorDispositivos.services.impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import practica.ControladorDispositivos.models.dto.SwitchDTO;
 import practica.ControladorDispositivos.models.entities.Switch;
@@ -69,4 +71,11 @@ public class SwitchServiceImpl implements IGenericDispService<SwitchDTO,Switch,S
         }
         return Optional.of(switchDTOList);
     }
+
+    @Override
+    public Page<SwitchDTO> findAllPaginated(Pageable pageable, String macAddress, String sede, Boolean noCoincidentes) {
+        return null;
+    }
+
+
 }

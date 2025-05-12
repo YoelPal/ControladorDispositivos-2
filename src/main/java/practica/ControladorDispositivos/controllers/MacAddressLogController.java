@@ -3,8 +3,11 @@ package practica.ControladorDispositivos.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import practica.ControladorDispositivos.models.dto.MacAddressLogDTO;
@@ -32,6 +35,19 @@ public class MacAddressLogController {
     @Operation(summary = "Obtener lista de Logs guardados.", description = "Devuelve la lista de todos los logs que se han recibido.")
     public ResponseEntity<List<MacAddressLogDTO>> findAll(){
         List<MacAddressLogDTO> listaLogs = genericDispService.findAll();
+        if (listaLogs.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(listaLogs);
+    }
+
+    @GetMapping("/paginated")
+    @Operation(summary = "Obtener lista de Logs guardados.", description = "Devuelve la lista de todos los logs que se han recibido.")
+    public ResponseEntity<Page<MacAddressLogDTO>> findAllPaginated(Pageable pageable,
+                                                                   @RequestParam(value = "macAddress", required = false) String macAddress,
+                                                                   @RequestParam(value = "sede", required = false) String sede,
+                                                                   @RequestParam(value = "noCoincidentes", required = false) Boolean noCoincidentes){
+        Page<MacAddressLogDTO> listaLogs = genericDispService.findAllPaginated(pageable,macAddress,sede,noCoincidentes);
         if (listaLogs.isEmpty()){
             return ResponseEntity.noContent().build();
         }
