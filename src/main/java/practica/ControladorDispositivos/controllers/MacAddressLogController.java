@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import practica.ControladorDispositivos.models.dto.MacAddressLogDTO;
 import practica.ControladorDispositivos.models.entities.MacAddressLog;
 import practica.ControladorDispositivos.services.IGenericDispService;
+import practica.ControladorDispositivos.services.IMacAddressLogService;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -22,11 +24,11 @@ import java.util.Optional;
 @Tag(name = "MacAddressLogs", description = "Logs con los datos recogidos ")
 public class MacAddressLogController {
 
-    private final IGenericDispService<MacAddressLogDTO, MacAddressLog,String> genericDispService;
+    private final IMacAddressLogService genericDispService;
   
 
 
-    public MacAddressLogController(@Qualifier("MacAddressLog") IGenericDispService<MacAddressLogDTO, MacAddressLog,String> genericDispService,ModelMapper modelMapper) {
+    public MacAddressLogController(@Qualifier("MacAddressLog") IMacAddressLogService genericDispService,ModelMapper modelMapper) {
         this.genericDispService = genericDispService;
       
     }

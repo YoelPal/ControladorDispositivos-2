@@ -15,6 +15,7 @@ import practica.ControladorDispositivos.models.entities.MacAddressLog;
 import practica.ControladorDispositivos.models.repositories.MacAddressLogRepository;
 import practica.ControladorDispositivos.models.repositories.specification.MacAddressLogSpecs;
 import practica.ControladorDispositivos.services.IGenericDispService;
+import practica.ControladorDispositivos.services.IMacAddressLogService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service("MacAddressLog")
-public class MacAddressLogServiceImpl implements IGenericDispService<MacAddressLogDTO,MacAddressLog, String> {
+public class MacAddressLogServiceImpl implements IMacAddressLogService {
 
     private final MacAddressLogRepository macAddressLogRepository;
     private final ModelMapper modelMapper;
@@ -43,9 +44,10 @@ public class MacAddressLogServiceImpl implements IGenericDispService<MacAddressL
     }
 
     @Override
-    public Optional<MacAddressLogDTO> findById(String mac) {
+    public Optional<MacAddressLogDTO> findById(Long aLong) {
         return Optional.empty();
     }
+
 
     @Override
     public MacAddressLogDTO save(MacAddressLog macAddressLog) {
@@ -54,7 +56,7 @@ public class MacAddressLogServiceImpl implements IGenericDispService<MacAddressL
     }
 
     @Override
-    public boolean deleteById(String mac) {
+    public boolean deleteById(Long aLong) {
         return false;
     }
 
@@ -62,6 +64,8 @@ public class MacAddressLogServiceImpl implements IGenericDispService<MacAddressL
     public Optional<MacAddressLogDTO> update(MacAddressLog macAddressLog) {
         return Optional.empty();
     }
+
+
 
     @Override
     public Optional<List<MacAddressLogDTO>> findBySede(String sede){
@@ -73,6 +77,11 @@ public class MacAddressLogServiceImpl implements IGenericDispService<MacAddressL
             return Optional.of(listaLogs);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Page<MacAddressLogDTO> findAllPaginated(Pageable pageable, Specification<MacAddressLog> spec) {
+        return null;
     }
 
     @Override

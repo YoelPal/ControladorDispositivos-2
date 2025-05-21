@@ -1,10 +1,14 @@
 package practica.ControladorDispositivos.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -32,4 +36,18 @@ public abstract class Dispositivo {
     @Column(name = "sede")
     protected String sede;
 
+    @OneToMany(mappedBy = "dispositivo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Ip> ips = new ArrayList<>();
+
+    public void addIp(Ip ip){
+        ips.add(ip);
+        ip.setDispositivo(this);
+
+    }
+
+    public void removeIp(Ip ip) {
+        ips.remove(ip);
+        ip.setDispositivo(null); // Romper la relación inversa
+    }
 }

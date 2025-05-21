@@ -1,12 +1,37 @@
 package practica.ControladorDispositivos.models.repositories;
 
+import jakarta.annotation.Nonnull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
+import practica.ControladorDispositivos.models.entities.Ap;
+import practica.ControladorDispositivos.models.entities.Dispositivo;
+import practica.ControladorDispositivos.models.entities.Pc;
 import practica.ControladorDispositivos.models.entities.Tablet;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface TabletRepository extends JpaRepository<Tablet,String> {
+public interface TabletRepository extends JpaRepository<Tablet,String> , JpaSpecificationExecutor<Tablet> {
     List<Tablet> findBySede(String sede);
+
+    @Override
+    @EntityGraph(attributePaths = "ips")
+    @Nonnull
+    Page<Tablet> findAll(
+            @Nonnull Specification<Tablet> specification,
+            @Nonnull Pageable pageable);
+
+
+    @Override
+    @EntityGraph(attributePaths = "ips")
+    @NonNull
+    Optional<Tablet> findById(@NonNull String macAddress);
+
 }

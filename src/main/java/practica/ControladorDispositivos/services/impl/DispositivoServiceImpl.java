@@ -3,10 +3,13 @@ package practica.ControladorDispositivos.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import practica.ControladorDispositivos.models.dto.*;
 import practica.ControladorDispositivos.models.entities.*;
 import practica.ControladorDispositivos.models.repositories.DispositivoRepository;
+import practica.ControladorDispositivos.models.repositories.specification.DispositivosSpecs;
 import practica.ControladorDispositivos.services.IGenericDispService;
 import practica.ControladorDispositivos.services.dtoConverter.IDtoConverterService;
 
@@ -36,6 +39,9 @@ public class DispositivoServiceImpl implements IGenericDispService<DispositivoDT
 
     @Override
     public DispositivoDTO save(Dispositivo dispositivo) {
+        for (Ip ip : dispositivo.getIps()){
+            dispositivo.addIp(ip);
+        }
         Dispositivo savedDispositivo = dispositivoRepository.save(dispositivo);
         return dtoConverterService.converToDispositivoDTO(savedDispositivo);
     }
@@ -72,7 +78,14 @@ public class DispositivoServiceImpl implements IGenericDispService<DispositivoDT
     }
 
     @Override
-    public Page<DispositivoDTO> findAllPaginated(Pageable pageable,String macAddress,String sede, Boolean noCoincidentes) {
-        return dispositivoRepository.findAll(pageable).map(dtoConverterService::converToDispositivoDTO);
+    @Transactional
+    public Page<DispositivoDTO> findAllPaginated(Pageable pageable, Specification<Dispositivo> spec) {
+        Page<Dispositivo> dispositivosPage = dispositivoRepository.findAll(spec,pageable);
+
+        return dispositivosPage.map(dtoConverterService::converToDispositivoDTO);
     }
+
+
+
+
 }

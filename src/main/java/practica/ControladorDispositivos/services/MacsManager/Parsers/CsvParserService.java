@@ -1,4 +1,4 @@
-package practica.ControladorDispositivos.services.MacsManager;
+package practica.ControladorDispositivos.services.MacsManager.Parsers;
 
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
-@Service
+@Service("csv")
 public class CsvParserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CsvParserService.class);
 

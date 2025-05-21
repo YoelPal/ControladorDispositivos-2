@@ -3,8 +3,10 @@ package practica.ControladorDispositivos.services.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import practica.ControladorDispositivos.models.dto.PcDTO;
+import practica.ControladorDispositivos.models.entities.Ip;
 import practica.ControladorDispositivos.models.entities.Pc;
 import practica.ControladorDispositivos.models.repositories.PcRepository;
 import practica.ControladorDispositivos.services.IGenericDispService;
@@ -15,7 +17,6 @@ import java.util.stream.Collectors;
 @Service("Pc")
 public class PcServiceImpl implements IGenericDispService<PcDTO,Pc,String> {
     private final PcRepository pcRepository;
-   
     private final ModelMapper modelMapper;
 
     public PcServiceImpl(PcRepository pcRepository,ModelMapper modelMapper) {
@@ -39,6 +40,9 @@ public class PcServiceImpl implements IGenericDispService<PcDTO,Pc,String> {
 
     @Override
     public PcDTO save(Pc pc) {
+        for(Ip ip : pc.getIps()){
+            ip.setDispositivo(pc);
+        }
         Pc savedPc = pcRepository.save(pc);
         return modelMapper.map(savedPc, PcDTO.class);
     }
@@ -57,6 +61,11 @@ public class PcServiceImpl implements IGenericDispService<PcDTO,Pc,String> {
     public Optional<PcDTO> update(Pc pc) {
         Optional<Pc> pcOptional = pcRepository.findById(pc.getMacAddress());
         if (pcOptional.isPresent()){
+            pcOptional.get().getIps().clear();
+            for (Ip ip : pc.getIps()){
+                ip.setDispositivo(pcOptional.get());
+                pcOptional.get().addIp(ip);
+            }
             Pc updatedPc = pcRepository.save(pc);
             return Optional.of(modelMapper.map(updatedPc, PcDTO.class));
         }
@@ -74,10 +83,14 @@ public class PcServiceImpl implements IGenericDispService<PcDTO,Pc,String> {
         return Optional.of(pcDTOList);
     }
 
+
     @Override
-    public Page<PcDTO> findAllPaginated(Pageable pageable, String macAddress, String sede, Boolean noCoincidentes) {
-        return null;
+    public Page<PcDTO> findAllPaginated(Pageable pageable, Specification<Pc> spec) {
+        Page<Pc> pcPage = pcRepository.findAll(spec,pageable);
+
+        return pcPage.map(entity -> modelMapper.map(entity, PcDTO.class));
     }
+
 
 
 }

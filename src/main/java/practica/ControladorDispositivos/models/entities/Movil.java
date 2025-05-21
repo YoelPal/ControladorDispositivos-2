@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "movil")
 @Getter
@@ -17,8 +19,8 @@ public class Movil extends Dispositivo {
     @Column(name = "tamanyo")
     private double tamanyo;
 
-    public Movil(String macAddress, String fabricante, String modelo,String propietario, double tamanyo, String sede ) {
-        super(macAddress, fabricante, modelo, propietario,sede);
+    public Movil(String macAddress, String fabricante, String modelo, String propietario, double tamanyo, String sede, List<Ip> ips ) {
+        super(macAddress, fabricante, modelo, propietario,sede,ips);
         this.tamanyo = tamanyo;
     }
 

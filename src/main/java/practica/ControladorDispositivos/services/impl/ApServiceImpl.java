@@ -3,9 +3,11 @@ package practica.ControladorDispositivos.services.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import practica.ControladorDispositivos.models.dto.ApDTO;
 import practica.ControladorDispositivos.models.entities.Ap;
+import practica.ControladorDispositivos.models.entities.Ip;
 import practica.ControladorDispositivos.models.repositories.ApRepository;
 import practica.ControladorDispositivos.services.IGenericDispService;
 import practica.ControladorDispositivos.services.dtoConverter.IDtoConverterService;
@@ -41,6 +43,10 @@ public class ApServiceImpl implements IGenericDispService<ApDTO,Ap,String> {
 
     @Override
     public ApDTO save(Ap entity) {
+
+        for(Ip ip : entity.getIps()){
+            ip.setDispositivo(entity);
+        }
         Ap savedAp =  apRepository.save(entity);
         return modelMapper.map(savedAp, ApDTO.class);
     }
@@ -50,6 +56,7 @@ public class ApServiceImpl implements IGenericDispService<ApDTO,Ap,String> {
         Optional<Ap> apOptional = apRepository.findById(mac);
         if (apOptional.isPresent()){
             apRepository.deleteById(mac);
+            return true;
         }
         return false;
     }
@@ -58,7 +65,13 @@ public class ApServiceImpl implements IGenericDispService<ApDTO,Ap,String> {
     public Optional<ApDTO> update(Ap ap) {
         Optional<Ap> apOptional = apRepository.findById(ap.getMacAddress());
         if (apOptional.isPresent()){
-            Ap updatedAp = apRepository.save(ap);
+            apOptional.get().getIps().clear();
+            for(Ip ip : ap.getIps()){
+                ip.setDispositivo(apOptional.get());
+
+                apOptional.get().addIp(ip);
+            }
+            Ap updatedAp = apRepository.save(apOptional.get());
             return Optional.of(dtoConverterService.converToApDTO(updatedAp)) ;
         }
         return Optional.empty();
@@ -76,8 +89,10 @@ public class ApServiceImpl implements IGenericDispService<ApDTO,Ap,String> {
     }
 
     @Override
-    public Page<ApDTO> findAllPaginated(Pageable pageable, String macAddress, String sede, Boolean noCoincidentes) {
-        return null;
+    public Page<ApDTO> findAllPaginated(Pageable pageable, Specification<Ap> spec) {
+        Page<Ap> apPage = apRepository.findAll(spec,pageable);
+
+        return apPage.map(entity -> modelMapper.map(entity, ApDTO.class));
     }
 
 

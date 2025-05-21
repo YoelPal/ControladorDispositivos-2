@@ -7,20 +7,25 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import practica.ControladorDispositivos.models.dto.DispositivoDTO;
 import practica.ControladorDispositivos.models.entities.Dispositivo;
 import practica.ControladorDispositivos.services.IGenericDispService;
+import practica.ControladorDispositivos.services.impl.DispositivoServiceImpl;
 
 
 @RestController
 @RequestMapping("/dispositivos")
-@Tag(name = "Dispositivos",description = "Dispositivos almacenados con MAC conocida")
-public class DispositivoController extends GenericDeviceController<DispositivoDTO,Dispositivo,String> {
+@Tag(name = "Dispositivos", description = "Dispositivos almacenados con MAC conocida")
+public class DispositivoController extends GenericDeviceController<DispositivoDTO, Dispositivo, String> {
 
 
-    public DispositivoController(IGenericDispService<DispositivoDTO, Dispositivo, String> tipoService, IGenericDispService<DispositivoDTO, Dispositivo, String> dispositivoService, ModelMapper mapper) {
+    public DispositivoController(@Qualifier("dispositivo") IGenericDispService<DispositivoDTO, Dispositivo, String> tipoService, IGenericDispService<DispositivoDTO, Dispositivo, String> dispositivoService, ModelMapper mapper) {
         super(tipoService, dispositivoService, mapper);
 
     }
@@ -28,12 +33,12 @@ public class DispositivoController extends GenericDeviceController<DispositivoDT
 
     @DeleteMapping("/{macAddress}")
     @Operation(summary = "Eliminar dispositivo ", description = "Elimina un dispositivo(de cualquier tipo) a partir de su MAC")
-    @ApiResponses(value= {
-            @ApiResponse(responseCode = "404", description = "Dispositivo no encontrado con esa MAC. ",content = @Content(mediaType = "dispositivo/json")),
-                    @ApiResponse(responseCode = "200", description = "Producto eliminado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "Dispositivo no encontrado con esa MAC. ", content = @Content(mediaType = "dispositivo/json")),
+            @ApiResponse(responseCode = "200", description = "Producto eliminado")
     })
-    public ResponseEntity<?> deleteDispositivo(@Parameter(description = "MAC del dispositivo a eliminar") @PathVariable(value = "macAddress")String mac){
-        if (dispositivoService.deleteById(mac)){
+    public ResponseEntity<?> deleteDispositivo(@Parameter(description = "MAC del dispositivo a eliminar") @PathVariable(value = "macAddress") String mac) {
+        if (dispositivoService.deleteById(mac)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
@@ -50,4 +55,11 @@ public class DispositivoController extends GenericDeviceController<DispositivoDT
     }
 
 
+    @GetMapping("/paginated2")
+    @Operation(summary = "Obtener lista de dispositivos guardados", description = "Devuelve la lista paginada de todos los dispositivos")
+    public ResponseEntity<Page<DispositivoDTO>> findAllPaginated(Pageable pageable, Specification<Dispositivo> spec) {
+        Page<DispositivoDTO> listaDispositivos =tipoService.findAllPaginated(pageable,spec);
+        return ResponseEntity.ok(listaDispositivos);
+    }
 }
+

@@ -3,8 +3,12 @@ package practica.ControladorDispositivos.services.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import practica.ControladorDispositivos.models.dto.PcDTO;
 import practica.ControladorDispositivos.models.dto.SwitchDTO;
+import practica.ControladorDispositivos.models.entities.Ip;
+import practica.ControladorDispositivos.models.entities.Pc;
 import practica.ControladorDispositivos.models.entities.Switch;
 import practica.ControladorDispositivos.models.repositories.SwitchRepository;
 import practica.ControladorDispositivos.services.IGenericDispService;
@@ -37,6 +41,9 @@ public class SwitchServiceImpl implements IGenericDispService<SwitchDTO,Switch,S
 
     @Override
     public SwitchDTO save(Switch entity) {
+        for(Ip ip : entity.getIps()){
+            ip.setDispositivo(entity);
+        }
         Switch savedSwitch = switchRepository.save(entity);
         return modelMapper.map(savedSwitch, SwitchDTO.class);
     }
@@ -55,6 +62,12 @@ public class SwitchServiceImpl implements IGenericDispService<SwitchDTO,Switch,S
     public Optional<SwitchDTO> update(Switch entity) {
         Optional<Switch> switchOptional = switchRepository.findById(entity.getMacAddress());
         if (switchOptional.isPresent()){
+            switchOptional.get().getIps().clear();
+            for (Ip ip : entity.getIps()){
+                ip.setDispositivo(switchOptional.get());
+                switchOptional.get().addIp(ip);
+
+            }
             Switch updatedSwitch = switchRepository.save(entity);
             return Optional.of(modelMapper.map(updatedSwitch, SwitchDTO.class));
         }
@@ -73,8 +86,10 @@ public class SwitchServiceImpl implements IGenericDispService<SwitchDTO,Switch,S
     }
 
     @Override
-    public Page<SwitchDTO> findAllPaginated(Pageable pageable, String macAddress, String sede, Boolean noCoincidentes) {
-        return null;
+    public Page<SwitchDTO> findAllPaginated(Pageable pageable, Specification<Switch> spec) {
+        Page<Switch> switchPage = switchRepository.findAll(spec,pageable);
+
+        return switchPage.map(entity -> modelMapper.map(entity, SwitchDTO.class));
     }
 
 

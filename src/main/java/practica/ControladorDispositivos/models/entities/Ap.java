@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "ap")
 @Getter
@@ -21,8 +23,8 @@ public class Ap extends Dispositivo{
     private int estandarWifi;
 
 
-    public Ap(String macAdress,String fabricante,String modelo, String propietario, String banda, int estandarWifi,String sede){
-        super(macAdress,fabricante,modelo, propietario, sede);
+    public Ap(String macAdress, String fabricante, String modelo, String propietario, String banda, int estandarWifi, String sede, List<Ip> ips){
+        super(macAdress,fabricante,modelo, propietario, sede, ips );
         this.banda = banda;
         this.estandarWifi = estandarWifi;
 

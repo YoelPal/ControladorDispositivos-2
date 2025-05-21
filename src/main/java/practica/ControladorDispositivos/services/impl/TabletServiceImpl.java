@@ -3,8 +3,12 @@ package practica.ControladorDispositivos.services.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import practica.ControladorDispositivos.models.dto.PcDTO;
 import practica.ControladorDispositivos.models.dto.TabletDTO;
+import practica.ControladorDispositivos.models.entities.Ip;
+import practica.ControladorDispositivos.models.entities.Pc;
 import practica.ControladorDispositivos.models.entities.Tablet;
 import practica.ControladorDispositivos.models.repositories.TabletRepository;
 import practica.ControladorDispositivos.services.IGenericDispService;
@@ -39,6 +43,9 @@ public class TabletServiceImpl implements IGenericDispService<TabletDTO,Tablet,S
 
     @Override
     public TabletDTO save(Tablet entity) {
+        for(Ip ip : entity.getIps()){
+            ip.setDispositivo(entity);
+        }
         Tablet savedTablet = tabletRepository.save(entity);
         return modelMapper.map(savedTablet, TabletDTO.class);
     }
@@ -57,6 +64,11 @@ public class TabletServiceImpl implements IGenericDispService<TabletDTO,Tablet,S
     public Optional<TabletDTO> update(Tablet entity) {
         Optional<Tablet> tabletOpt = tabletRepository.findById(entity.getMacAddress());
         if (tabletOpt.isPresent()){
+            tabletOpt.get().getIps().clear();
+            for (Ip ip : entity.getIps()){
+                ip.setDispositivo(tabletOpt.get());
+                tabletOpt.get().addIp(ip);
+            }
             Tablet updatedTablet = tabletRepository.save(entity);
             return Optional.of(modelMapper.map(updatedTablet, TabletDTO.class));
         }
@@ -75,8 +87,10 @@ public class TabletServiceImpl implements IGenericDispService<TabletDTO,Tablet,S
     }
 
     @Override
-    public Page<TabletDTO> findAllPaginated(Pageable pageable, String macAddress, String sede, Boolean noCoincidentes) {
-        return null;
+    public Page<TabletDTO> findAllPaginated(Pageable pageable, Specification<Tablet> spec) {
+        Page<Tablet> tabletPage = tabletRepository.findAll(spec,pageable);
+
+        return tabletPage.map(entity -> modelMapper.map(entity, TabletDTO.class));
     }
 
 

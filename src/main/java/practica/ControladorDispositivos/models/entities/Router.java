@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "router")
 @Getter
@@ -19,8 +21,8 @@ public class Router extends Dispositivo{
     @Column(name = "ancho_banda")
     private int anchoBanda;
 
-    public Router(String macAdress,String fabricante,String modelo, String propietario,int velocidad, int anchoBanda, String sede){
-        super(macAdress,fabricante,modelo, propietario, sede);
+    public Router(String macAdress, String fabricante, String modelo, String propietario, int velocidad, int anchoBanda, String sede, List<Ip> ips){
+        super(macAdress,fabricante,modelo, propietario, sede, ips);
         this.anchoBanda = anchoBanda;
         this.velocidad = velocidad;
 

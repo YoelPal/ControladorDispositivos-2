@@ -3,8 +3,12 @@ package practica.ControladorDispositivos.services.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import practica.ControladorDispositivos.models.dto.PcDTO;
 import practica.ControladorDispositivos.models.dto.RouterDTO;
+import practica.ControladorDispositivos.models.entities.Ip;
+import practica.ControladorDispositivos.models.entities.Pc;
 import practica.ControladorDispositivos.models.entities.Router;
 import practica.ControladorDispositivos.models.repositories.RouterRepository;
 import practica.ControladorDispositivos.services.IGenericDispService;
@@ -37,6 +41,9 @@ public class RouterServiceImpl implements IGenericDispService<RouterDTO,Router,S
 
     @Override
     public RouterDTO save(Router entity) {
+        for(Ip ip : entity.getIps()){
+            ip.setDispositivo(entity);
+        }
         Router savedRouter = routerRepository.save(entity);
         return modelMapper.map(savedRouter,RouterDTO.class);
     }
@@ -55,6 +62,11 @@ public class RouterServiceImpl implements IGenericDispService<RouterDTO,Router,S
     public Optional<RouterDTO> update(Router entity) {
         Optional<Router> routerOpt = routerRepository.findById(entity.getMacAddress());
         if (routerOpt.isPresent()) {
+            routerOpt.get().getIps().clear();
+            for (Ip ip : entity.getIps()){
+                ip.setDispositivo(routerOpt.get());
+                routerOpt.get().addIp(ip);
+            }
             Router updatedRouter = routerRepository.save(entity);
             return Optional.of(modelMapper.map(updatedRouter, RouterDTO.class)) ;
         }
@@ -73,8 +85,10 @@ public class RouterServiceImpl implements IGenericDispService<RouterDTO,Router,S
     }
 
     @Override
-    public Page<RouterDTO> findAllPaginated(Pageable pageable, String macAddress, String sede, Boolean noCoincidentes) {
-        return null;
+    public Page<RouterDTO> findAllPaginated(Pageable pageable, Specification<Router> spec) {
+        Page<Router> routerPage = routerRepository.findAll(spec,pageable);
+
+        return routerPage.map(entity -> modelMapper.map(entity, RouterDTO.class));
     }
 
 

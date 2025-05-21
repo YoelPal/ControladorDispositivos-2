@@ -1,12 +1,12 @@
 package practica.ControladorDispositivos.services.MacsManager;
 
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import practica.ControladorDispositivos.models.entities.MacAddressLog;
 import practica.ControladorDispositivos.models.repositories.MacAddressLogRepository;
+import practica.ControladorDispositivos.services.MacsManager.Parsers.CsvParserService;
 
 import java.util.List;
 @Service("csvDataSource")
@@ -20,14 +20,13 @@ public class CsvMacAddressProviderService implements IMacAddressProviderService 
         this.csvParserService = csvParserService;
         this.macAddressLogRepository = macAddressLogRepository;
     }
-    @Setter
-    private MultipartFile file;
+
 
 
     @Override
-    public List<MacAddressLog> obtenerLogs() {
-        t0 = System.currentTimeMillis();
+    public List<MacAddressLog> obtenerLogs(MultipartFile file) {
         return csvParserService.CsvValoresPorCabeceras(file);
+
     }
 
     @Override

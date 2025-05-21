@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import practica.ControladorDispositivos.models.entities.MacAddressLog;
 
+import javax.crypto.Mac;
 import java.util.List;
 
 @Repository
@@ -16,6 +17,8 @@ public interface MacAddressLogRepository extends JpaRepository<MacAddressLog, Lo
 
     @Query("select l from MacAddressLog l left join Dispositivo d on l.macAddress = d.macAddress where d.macAddress is null")
     List<MacAddressLog> listaLogsNoRegistrados();
+    @Query("select l from MacAddressLog l inner join Dispositivo d on l.macAddress = d.macAddress")
+    List<MacAddressLog> listaLogsRegistradas();
 
     @Query("select l.macAddress from MacAddressLog l left join Dispositivo d on l.macAddress = d.macAddress where l.macAddress is null")
     List<String> listaMAcsNoRegistrados();

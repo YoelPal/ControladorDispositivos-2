@@ -6,11 +6,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.*;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import practica.ControladorDispositivos.models.dto.DispositivoDTO;
 import practica.ControladorDispositivos.models.entities.Dispositivo;
+import practica.ControladorDispositivos.models.repositories.specification.GenericSpecs;
 import practica.ControladorDispositivos.services.IGenericDispService;
 
 import java.util.Collections;
@@ -97,12 +101,30 @@ public abstract class GenericDeviceController<DTO, Ent, ID> {
             @ApiResponse(responseCode = "204", description = "No hay dispositivos en esa sede.")
     })
     public ResponseEntity<List<DTO>> findBySede(
-            @Parameter(description = "Sede para filtrar") @PathVariable ID sede
+            @Parameter(description = "Sede para filtrar") @PathVariable String sede
     ) {
         Optional<List<DTO>> list = tipoService.findBySede(sede);
         return list.isPresent() && !list.get().isEmpty()
                 ? ResponseEntity.ok(list.get())
                 : ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/paginated")
+    @Operation(summary = "Obtener lista de dispositivos guardados", description = "Devuelve la lista paginada de todos los dispositivos")
+    public ResponseEntity<Page<DTO>> findAllPaginated(Pageable pageable,
+                                                      @RequestParam(value = "macAddress", required = false) String macAddress,
+                                                      @RequestParam(value = "sede", required = false) String sede) {
+
+        Specification<Ent> spec = Specification.where(null);
+        if (macAddress!=null && !macAddress.isEmpty()){
+            spec = spec.and(GenericSpecs.macContaining(macAddress));
+        }
+
+        if (sede!=null && !sede.isEmpty()){
+            spec = spec.and(GenericSpecs.sedeContaining(sede));
+        }
+        Page<DTO> listaDispositivos =tipoService.findAllPaginated(pageable,spec);
+        return ResponseEntity.ok(listaDispositivos);
     }
 
     /** Extrae el ID (p.ej. MAC) de un DTO */

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "switch")
 @Getter
@@ -20,8 +22,8 @@ public class Switch  extends Dispositivo{
     @Column(name = "velocidad")
     private int velocidad;
 
-    public Switch(String macAdress,String fabricante,String modelo, String propietario, int puertos, int velocidad,String sede){
-        super(macAdress,fabricante,modelo, propietario, sede);
+    public Switch(String macAdress, String fabricante, String modelo, String propietario, int puertos, int velocidad, String sede, List<Ip> ips){
+        super(macAdress,fabricante,modelo, propietario, sede,ips);
         this.puertos = puertos;
         this.velocidad = velocidad;
     }

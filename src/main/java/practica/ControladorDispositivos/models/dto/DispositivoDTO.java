@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import practica.ControladorDispositivos.models.entities.Ip;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,4 +23,5 @@ public class DispositivoDTO {
     private String propietario;
     private String sede;
     private String tipoDispositivo;
+    private List<IpDTO> ips;
 }

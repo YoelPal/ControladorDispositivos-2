@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "pc")
 @Getter
@@ -24,8 +26,8 @@ public class Pc extends Dispositivo{
     private String cpu;
 
 
-    public Pc(String macAdress, String fabricante, String modelo, String propietario,String sede, String sistemaOperativo, int ram, String cpu){
-        super(macAdress,fabricante,modelo, propietario, sede);
+    public Pc(String macAdress, String fabricante, String modelo, String propietario, String sede, String sistemaOperativo, int ram, String cpu, List<Ip> ips){
+        super(macAdress,fabricante,modelo, propietario, sede,ips);
         this.cpu = cpu;
         this.ram = ram;
         this.sistemaOperativo = sistemaOperativo;
