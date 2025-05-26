@@ -11,6 +11,7 @@ import practica.ControladorDispositivos.models.entities.MacAddressLog;
 
 import javax.crypto.Mac;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MacAddressLogRepository extends JpaRepository<MacAddressLog, Long>, JpaSpecificationExecutor<MacAddressLog> {
@@ -29,4 +30,5 @@ public interface MacAddressLogRepository extends JpaRepository<MacAddressLog, Lo
 
 
 
+    Optional<MacAddressLog> findByMacAddress(String macAddress);
 }

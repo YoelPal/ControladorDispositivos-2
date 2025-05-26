@@ -17,6 +17,7 @@ import practica.ControladorDispositivos.models.repositories.specification.MacAdd
 import practica.ControladorDispositivos.services.IGenericDispService;
 import practica.ControladorDispositivos.services.IMacAddressLogService;
 
+import javax.crypto.Mac;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -56,8 +57,13 @@ public class MacAddressLogServiceImpl implements IMacAddressLogService {
     }
 
     @Override
-    public boolean deleteById(Long aLong) {
-        return false;
+    public boolean deleteById(Long id) {
+        macAddressLogRepository.deleteById(id);
+        return true;
+    }
+
+    public Optional<MacAddressLog> findByMacAddress(String macAddress){
+        return macAddressLogRepository.findByMacAddress(macAddress);
     }
 
     @Override

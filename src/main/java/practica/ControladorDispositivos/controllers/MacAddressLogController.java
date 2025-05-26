@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import practica.ControladorDispositivos.models.dto.MacAddressLogDTO;
@@ -61,6 +62,15 @@ public class MacAddressLogController {
     public ResponseEntity<List<MacAddressLogDTO>> findBySede(@Parameter(description = "Nombre de la sede de los logs que se desean encontrar")@PathVariable String sede ){
         Optional<List<MacAddressLogDTO>> listaLogsSede = genericDispService.findBySede(sede);
         return listaLogsSede.map(macAddressLogDTOS -> ResponseEntity.ok().body(macAddressLogDTOS)).orElseGet(() -> ResponseEntity.noContent().build());
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Elimina un MacAddressLog")
+    public ResponseEntity<?> deleteById(@Parameter(description = "Id del log")@PathVariable Long id){
+        genericDispService.deleteById(id);
+
+            return ResponseEntity.ok("Log eliminado");
+
     }
 
 

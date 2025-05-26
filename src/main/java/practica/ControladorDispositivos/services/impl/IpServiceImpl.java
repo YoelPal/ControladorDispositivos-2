@@ -71,6 +71,10 @@ public class IpServiceImpl implements IIpService {
         return Optional.empty();
     }
 
+    public Optional<Ip> findByIpAddress(String ip){
+        return ipRepository.findByIpAddress(ip);
+    }
+
     @Override
     public Page<IpDTO> findAllPaginated(Pageable pageable, Specification<Ip> spec) {
         Page<Ip> ips = ipRepository.findAll(spec,pageable);

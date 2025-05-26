@@ -43,7 +43,6 @@ public abstract class Dispositivo {
     public void addIp(Ip ip){
         ips.add(ip);
         ip.setDispositivo(this);
-
     }
 
     public void removeIp(Ip ip) {
