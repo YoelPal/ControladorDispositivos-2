@@ -30,7 +30,7 @@ public class MacAddressLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "mc_address", unique = true)
+    @Column(name = "mc_address")
     private String macAddress;
 
     @Column(name = "timestamp")

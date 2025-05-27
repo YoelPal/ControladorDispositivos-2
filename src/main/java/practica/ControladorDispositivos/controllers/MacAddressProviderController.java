@@ -151,6 +151,8 @@ public class MacAddressProviderController {
 
         ipService.saveNewIpsByMac(logsExistentes);
 
+
+
         return ResponseEntity.ok("Ips actualizadas");
     }
 

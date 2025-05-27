@@ -73,5 +73,15 @@ public class MacAddressLogController {
 
     }
 
+    @DeleteMapping("/updated")
+    @Operation(summary = "Elimina los logs ya actualizados")
+    public ResponseEntity<?> deleteLogsUpdated(){
+        if (genericDispService.deleteLogsUpdated()){
+            return ResponseEntity.ok("Logs eliminados");
+        }
+        else
+            return ResponseEntity.ok("Ningún Log eliminado");
+    }
+
 
 }

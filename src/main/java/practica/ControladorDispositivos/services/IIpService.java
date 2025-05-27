@@ -12,5 +12,6 @@ public interface IIpService extends IGenericDispService<IpDTO, Ip,Long>{
     void saveNewIpsByMac(List<MacAddressLog> macsConocidas);
 
 
+
     Optional<Ip> findByIpAddress(String ipAddress);
 }

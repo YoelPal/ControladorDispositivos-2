@@ -12,6 +12,7 @@ public interface IMacAddressLogService extends IGenericDispService<MacAddressLog
 
         Page<MacAddressLogDTO> findAllPaginated(Pageable pageable, String macAddress, String sede, Boolean noCoincidentes);
 
+        boolean deleteLogsUpdated();
 
         Optional<MacAddressLog> findByMacAddress(String macAddress);
         }

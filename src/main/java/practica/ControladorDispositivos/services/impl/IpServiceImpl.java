@@ -25,6 +25,7 @@ public class IpServiceImpl implements IIpService {
     private final ModelMapper modelMapper;
     private final DispositivoRepository dispositivoRepository;
 
+
     public IpServiceImpl(IpRepository ipRepository, ModelMapper modelMapper, DispositivoRepository dispositivoRepository) {
         this.ipRepository = ipRepository;
         this.modelMapper = modelMapper;
@@ -108,4 +109,5 @@ public class IpServiceImpl implements IIpService {
         }
 
     }
+
 }

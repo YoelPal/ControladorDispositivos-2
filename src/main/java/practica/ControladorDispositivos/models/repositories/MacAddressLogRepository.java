@@ -30,5 +30,6 @@ public interface MacAddressLogRepository extends JpaRepository<MacAddressLog, Lo
 
 
 
+
     Optional<MacAddressLog> findByMacAddress(String macAddress);
 }
