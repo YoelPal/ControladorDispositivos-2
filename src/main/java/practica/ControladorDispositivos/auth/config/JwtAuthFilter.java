@@ -1,5 +1,6 @@
 package practica.ControladorDispositivos.auth.config;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import practica.ControladorDispositivos.auth.usuario.User;
 import practica.ControladorDispositivos.auth.usuario.UserRepository;
 
 import java.io.IOException;
+import java.security.SignatureException;
 import java.util.Optional;
 
 @Component
@@ -62,8 +64,23 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         final String jwtToken = authHeader.substring(7);
         log.info("Token JWT extraído: {}", jwtToken);
-        final String userName = jwtService.extractUsername(jwtToken);
-        log.info("Nombre de usuario extraído del token: {}", userName);
+
+        String userName = null;
+        try{
+            userName = jwtService.extractUsername(jwtToken);
+            log.info("Nombre de usuario extraído del token: {}", userName);
+        }catch (ExpiredJwtException e) {
+            log.error("JWT ha expirado para el token: {}. Mensaje: {}", jwtToken, e.getMessage());
+            // Lanza una excepción de autenticación para que el AuthenticationEntryPoint la capture
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token JWT expirado: " + e.getMessage());
+            return; // Termina la cadena de filtros aquí
+        } catch (Exception e) {
+            log.error("Error inesperado al validar JWT: {}. Mensaje: {}", jwtToken, e.getMessage());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error al validar token JWT: " + e.getMessage());
+            return; // Termina la cadena de filtros aquí
+        }
+
+
         if (userName == null || SecurityContextHolder.getContext().getAuthentication() != null){
             log.warn("Nombre de usuario nulo en el token o ya hay autenticación.");
             filterChain.doFilter(request, response);
@@ -91,14 +108,22 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
         log.info("Usuario encontrado en UserRepository: {}", user.get().getNombre());
 
-        final var authToken = new UsernamePasswordAuthenticationToken(
-                userDetails,
-                null,
-                userDetails.getAuthorities()
-        );
-        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-        log.info("Autenticación establecida para el usuario: {}", userDetails.getUsername());
+        if (jwtService.isTokenValid(jwtToken, user.get())) {
+            final var authToken = new UsernamePasswordAuthenticationToken(
+                    userDetails,
+                    null,
+                    userDetails.getAuthorities()
+            );
+
+            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authToken);
+            log.info("Autenticación establecida para el usuario: {}", userDetails.getUsername());
+        }else {
+            log.warn("Token JWT no válido para el usuario: {}", userDetails.getUsername());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token JWT inválido para el usuario.");
+            return;
+
+        }
 
         filterChain.doFilter(request, response);
         log.info("Filtro completado para la petición: {}", request.getServletPath());

@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -30,6 +31,9 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final TokenRepository tokenRepository;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -37,7 +41,14 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((req ->
-                        req.requestMatchers("/auth/login","/auth/refresh").permitAll()
+                        req.requestMatchers(
+                                        AntPathRequestMatcher.antMatcher("/"), // Permite la ruta raíz (para index.html)
+                                        AntPathRequestMatcher.antMatcher("/*.html"), // Permite acceso directo a index.html
+                                        AntPathRequestMatcher.antMatcher("/*.ico"),
+                                        AntPathRequestMatcher.antMatcher("/*.png"),// Permite el favicon
+                                        AntPathRequestMatcher.antMatcher("/assets/**"), // Permite todos los archivos dentro de la carpeta assets
+                                        AntPathRequestMatcher.antMatcher("/error")).permitAll()
+                                .requestMatchers("/auth/login","/auth/refresh").permitAll()
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 .requestMatchers("/v3/api-docs/**").permitAll()
                                 .requestMatchers("/auth/register")
@@ -48,6 +59,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint))
 
                 .logout(logout ->
                         logout.logoutUrl("/auth/logout")
