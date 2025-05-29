@@ -57,11 +57,11 @@ public class MacAddressProviderController {
 
 
     @PostMapping(value = "/parser", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "Obtener los datos a partir de un archivo .csv y guardarlos en una base d datos", description = "Recibe un archivo .csv y obtiene de el los campos requeridos para guardarlos.")
+    @Operation(summary = "Obtener los datos a partir de un archivo .csv o .txt y guardarlos en una base de datos", description = "Recibe un archivo .csv o .txt(sede,ip,mac) y obtiene de el los campos requeridos para guardarlos.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Archivo CSV recibido y procesado correctamente."),
-            @ApiResponse(responseCode = "204", description = "Archivo CSV recibido correctamente, pero no se encontraron datos válidos para guardar."),
-            @ApiResponse(responseCode = "400", description = "No se encuentra el archivo CSV."),
+            @ApiResponse(responseCode = "200", description = "Archivo  recibido y procesado correctamente."),
+            @ApiResponse(responseCode = "204", description = "Archivo  recibido correctamente, pero no se encontraron datos válidos para guardar."),
+            @ApiResponse(responseCode = "400", description = "No se encuentra el archivo."),
             @ApiResponse(responseCode = "500", description = "Error al procesar el archivo.")
     })
     public ResponseEntity<Map<String,Object>> uploadFile(@Parameter(description = "Archivo .csv o .txt a subir", required = true,
@@ -142,7 +142,7 @@ public class MacAddressProviderController {
     }
 
     @PutMapping("/addips")
-    @Operation(summary = "Añade las ips a los dispositivos existentes", description = "A partir de los logs ya guardados busca ips no guardadas con igual mac")
+    @Operation(summary = "Añade las ips a los dispositivos existentes desde los logs guardados", description = "A partir de los logs ya guardados busca ips no guardadas con igual mac")
     public ResponseEntity<?> addIps(){
         List<MacAddressLog> logsExistentes = macAddressLogService.findAll()
                 .stream()

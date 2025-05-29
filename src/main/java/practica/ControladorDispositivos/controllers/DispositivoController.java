@@ -55,11 +55,11 @@ public class DispositivoController extends GenericDeviceController<DispositivoDT
     }
 
 
-    @GetMapping("/paginated2")
+    /*@GetMapping("/paginated2")
     @Operation(summary = "Obtener lista de dispositivos guardados", description = "Devuelve la lista paginada de todos los dispositivos")
     public ResponseEntity<Page<DispositivoDTO>> findAllPaginated(Pageable pageable, Specification<Dispositivo> spec) {
         Page<DispositivoDTO> listaDispositivos =tipoService.findAllPaginated(pageable,spec);
         return ResponseEntity.ok(listaDispositivos);
-    }
+    }*/
 }
 

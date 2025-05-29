@@ -45,7 +45,7 @@ public class MacAddressLogController {
     }
 
     @GetMapping("/paginated")
-    @Operation(summary = "Obtener lista de Logs guardados.", description = "Devuelve la lista de todos los logs que se han recibido.")
+    @Operation(summary = "Obtener lista de Logs guardados paginados.", description = "Devuelve la lista de todos los logs que se han recibido.")
     public ResponseEntity<Page<MacAddressLogDTO>> findAllPaginated(Pageable pageable,
                                                                    @RequestParam(value = "macAddress", required = false) String macAddress,
                                                                    @RequestParam(value = "sede", required = false) String sede,
