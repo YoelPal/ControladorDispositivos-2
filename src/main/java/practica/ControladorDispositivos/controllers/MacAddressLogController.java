@@ -26,7 +26,6 @@ import java.util.Optional;
 public class MacAddressLogController {
 
     private final IMacAddressLogService genericDispService;
-  
 
 
     public MacAddressLogController(@Qualifier("MacAddressLog") IMacAddressLogService genericDispService,ModelMapper modelMapper) {
