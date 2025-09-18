@@ -93,7 +93,6 @@ El objetivo principal es:
 * Se han realizado pruebas mediante Postman para probar todos los endpoints de la aplicación. 
 
 ## Próximos Pasos (Posibles)
-* 
 * Considerar la implementación de roles más granulares para la autorización.
 * Mejorar el manejo de errores y las respuestas de la API.
 
