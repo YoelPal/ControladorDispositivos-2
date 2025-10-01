@@ -51,7 +51,7 @@ El objetivo principal es:
 * **Lombok:** Librería para reducir el código boilerplate (anotaciones como `@Data`, `@Builder`, `@RequiredArgsConstructor`).
 * **SLF4j y Logback:** Librerías para el logging.
 * **Swagger UI / OpenAPI:** Herramientas para la documentación y prueba de la API.
-* **Maven/Gradle:** Herramienta de gestión de dependencias y build.
+* **Maven:** Herramienta de gestión de dependencias y build.
 * **PostMan:** Herramienta para pruebas de funcionamiento.
 
 ## Configuración
