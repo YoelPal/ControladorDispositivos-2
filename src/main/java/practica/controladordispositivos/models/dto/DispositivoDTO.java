@@ -1,4 +1,4 @@
-package practica.ControladorDispositivos.models.dto;
+package practica.controladordispositivos.models.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import practica.ControladorDispositivos.models.entities.Ip;
 
 import java.util.List;
 

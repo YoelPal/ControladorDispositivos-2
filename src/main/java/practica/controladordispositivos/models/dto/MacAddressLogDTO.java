@@ -1,4 +1,4 @@
-package practica.ControladorDispositivos.models.dto;
+package practica.controladordispositivos.models.dto;
 
 
 import lombok.*;

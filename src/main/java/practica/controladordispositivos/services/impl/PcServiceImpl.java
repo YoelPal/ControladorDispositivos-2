@@ -1,15 +1,17 @@
-package practica.ControladorDispositivos.services.impl;
+package practica.controladordispositivos.services.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import practica.ControladorDispositivos.models.dto.PcDTO;
-import practica.ControladorDispositivos.models.entities.Ip;
-import practica.ControladorDispositivos.models.entities.Pc;
-import practica.ControladorDispositivos.models.repositories.PcRepository;
-import practica.ControladorDispositivos.services.IGenericDispService;
+
+import practica.controladordispositivos.models.dto.PcDTO;
+import practica.controladordispositivos.models.entities.Ip;
+import practica.controladordispositivos.models.entities.Pc;
+import practica.controladordispositivos.models.repositories.PcRepository;
+import practica.controladordispositivos.services.IGenericDispService;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

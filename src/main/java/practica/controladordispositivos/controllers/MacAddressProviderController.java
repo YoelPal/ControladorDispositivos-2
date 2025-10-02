@@ -1,4 +1,4 @@
-package practica.ControladorDispositivos.controllers;
+package practica.controladordispositivos.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -7,6 +7,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import practica.controladordispositivos.models.dto.DispositivoDTO;
+import practica.controladordispositivos.models.entities.Dispositivo;
+import practica.controladordispositivos.models.entities.MacAddressLog;
+import practica.controladordispositivos.services.IGenericDispService;
+import practica.controladordispositivos.services.IIpService;
+import practica.controladordispositivos.services.IMacAddressLogService;
+import practica.controladordispositivos.services.MacsManager.IMacAddressProviderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -15,21 +22,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import practica.ControladorDispositivos.models.dto.DispositivoDTO;
-import practica.ControladorDispositivos.models.entities.Dispositivo;
-import practica.ControladorDispositivos.models.entities.MacAddressLog;
-import practica.ControladorDispositivos.services.IGenericDispService;
-import practica.ControladorDispositivos.services.IIpService;
-import practica.ControladorDispositivos.services.IMacAddressLogService;
-import practica.ControladorDispositivos.services.MacsManager.CsvMacAddressProviderService;
-import practica.ControladorDispositivos.services.MacsManager.IMacAddressProviderService;
-import practica.ControladorDispositivos.services.MacsManager.IMacComparatorService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/MacAddressProvider")
@@ -40,18 +37,21 @@ public class MacAddressProviderController {
     private final IMacAddressProviderService txtProvider;
     private final IMacAddressLogService macAddressLogService;
     private final IIpService ipService;
-    private final IMacComparatorService macComparatorService;
     private final ModelMapper modelMapper;
 
+    private static final String MESSAGE_KEY = "message";
 
-    public MacAddressProviderController(@Qualifier("dispositivo") IGenericDispService<DispositivoDTO, Dispositivo, String> dispService, @Qualifier("csvDataSource") IMacAddressProviderService macAddressProvider, @Qualifier("txt") IMacAddressProviderService txtProvider, @Qualifier("MacAddressLog") IMacAddressLogService macAddressLogService, @Qualifier("ip") IIpService ipService, IMacComparatorService macComparatorService, ModelMapper modelMapper) {
+
+    public MacAddressProviderController(@Qualifier("dispositivo") IGenericDispService<DispositivoDTO, Dispositivo, String> dispService, 
+    @Qualifier("csvDataSource") IMacAddressProviderService macAddressProvider, @Qualifier("txt") IMacAddressProviderService txtProvider, 
+    @Qualifier("macAddressLog") IMacAddressLogService macAddressLogService, @Qualifier("ip") IIpService ipService, ModelMapper modelMapper) {
         this.dispService = dispService;
         this.csvProvider = macAddressProvider;
         this.txtProvider = txtProvider;
         this.macAddressLogService = macAddressLogService;
 
         this.ipService = ipService;
-        this.macComparatorService = macComparatorService;
+    // ...existing code...
         this.modelMapper = modelMapper;
     }
 
@@ -70,13 +70,24 @@ public class MacAddressProviderController {
 
         Map<String,Object> response = new HashMap<>();
         if (file.isEmpty()){
-            response.put("message","No se encuentra el archivo ");
+            response.put(MESSAGE_KEY,"No se encuentra el archivo ");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null) {
+            response.put(MESSAGE_KEY, "El archivo no tiene un nombre válido.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        String filename = StringUtils.cleanPath(originalFilename);
         String ext = StringUtils.getFilenameExtension(filename);
 
+        if (ext == null) {
+            response.put(MESSAGE_KEY, "No se pudo determinar la extensión del archivo.");
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(response);
+        }
 
         IMacAddressProviderService svc;
         String label;
@@ -90,7 +101,7 @@ public class MacAddressProviderController {
                 label = "TXT";
                 break;
             default:
-                response.put("message","Formato no soportado: ." + ext);
+                response.put(MESSAGE_KEY,"Formato no soportado: ." + ext);
                 return ResponseEntity
                         .status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
                         .body(response);
@@ -134,7 +145,7 @@ public class MacAddressProviderController {
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            response.put("message","Error procesando el archivo " + label);
+            response.put(MESSAGE_KEY,"Error procesando el archivo " + label);
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(response);
@@ -143,7 +154,7 @@ public class MacAddressProviderController {
 
     @PutMapping("/addips")
     @Operation(summary = "Añade las ips a los dispositivos existentes desde los logs guardados", description = "A partir de los logs ya guardados busca ips no guardadas con igual mac")
-    public ResponseEntity<?> addIps(){
+    public ResponseEntity<String> addIps(){
         List<MacAddressLog> logsExistentes = macAddressLogService.findAll()
                 .stream()
                 .map(entity -> modelMapper.map(entity,MacAddressLog.class))

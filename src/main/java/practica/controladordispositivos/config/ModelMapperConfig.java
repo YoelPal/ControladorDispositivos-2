@@ -1,10 +1,11 @@
-package practica.ControladorDispositivos.config;
+package practica.controladordispositivos.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import practica.ControladorDispositivos.models.dto.DispositivoDTO;
-import practica.ControladorDispositivos.models.entities.Dispositivo;
+
+import practica.controladordispositivos.models.dto.DispositivoDTO;
+import practica.controladordispositivos.models.entities.Dispositivo;
 
 @Configuration
 public class ModelMapperConfig {

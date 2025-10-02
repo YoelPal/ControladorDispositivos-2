@@ -1,4 +1,4 @@
-package practica.ControladorDispositivos.models.entities;
+package practica.controladordispositivos.models.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

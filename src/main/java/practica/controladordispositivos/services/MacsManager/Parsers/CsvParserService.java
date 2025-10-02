@@ -1,16 +1,19 @@
-package practica.ControladorDispositivos.services.MacsManager.Parsers;
+package practica.controladordispositivos.services.MacsManager.Parsers;
 
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
+
+import practica.controladordispositivos.models.entities.MacAddressLog;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import practica.ControladorDispositivos.models.entities.MacAddressLog;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;

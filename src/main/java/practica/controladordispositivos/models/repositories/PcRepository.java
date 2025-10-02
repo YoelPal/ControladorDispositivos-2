@@ -1,6 +1,8 @@
-package practica.ControladorDispositivos.models.repositories;
+package practica.controladordispositivos.models.repositories;
 
 import jakarta.annotation.Nonnull;
+import practica.controladordispositivos.models.entities.Pc;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -9,10 +11,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
-import practica.ControladorDispositivos.models.entities.Ap;
-import practica.ControladorDispositivos.models.entities.Dispositivo;
-import practica.ControladorDispositivos.models.entities.Pc;
-
 
 import java.util.List;
 import java.util.Optional;

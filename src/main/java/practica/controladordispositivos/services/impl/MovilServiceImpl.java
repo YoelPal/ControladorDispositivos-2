@@ -1,4 +1,4 @@
-package practica.ControladorDispositivos.services.impl;
+package practica.controladordispositivos.services.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -6,13 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import practica.ControladorDispositivos.models.dto.MovilDTO;
-import practica.ControladorDispositivos.models.dto.PcDTO;
-import practica.ControladorDispositivos.models.entities.Ip;
-import practica.ControladorDispositivos.models.entities.Movil;
-import practica.ControladorDispositivos.models.entities.Pc;
-import practica.ControladorDispositivos.models.repositories.MovilRepository;
-import practica.ControladorDispositivos.services.IGenericDispService;
+
+import practica.controladordispositivos.models.dto.MovilDTO;
+import practica.controladordispositivos.models.entities.Ip;
+import practica.controladordispositivos.models.entities.Movil;
+import practica.controladordispositivos.models.repositories.MovilRepository;
+import practica.controladordispositivos.services.IGenericDispService;
+
 import java.util.List;
 import java.util.Optional;
 

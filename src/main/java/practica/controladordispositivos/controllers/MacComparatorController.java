@@ -1,16 +1,15 @@
-package practica.ControladorDispositivos.controllers;
+package practica.controladordispositivos.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import practica.controladordispositivos.models.dto.MacAddressLogDTO;
+import practica.controladordispositivos.services.MacsManager.IMacComparatorService;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import practica.ControladorDispositivos.models.dto.MacAddressLogDTO;
-import practica.ControladorDispositivos.services.MacsManager.IMacComparatorService;
-
-
 
 import java.util.List;
 import java.util.stream.Collectors;

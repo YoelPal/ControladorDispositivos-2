@@ -1,6 +1,4 @@
-package practica.ControladorDispositivos.models.repositories.specification;
-
-import practica.ControladorDispositivos.models.entities.Pc;
+package practica.controladordispositivos.models.repositories.specification;
 
 public class PcSpecs {
 }

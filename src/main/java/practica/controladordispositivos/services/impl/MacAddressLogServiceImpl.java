@@ -1,6 +1,16 @@
-package practica.ControladorDispositivos.services.impl;
+package practica.controladordispositivos.services.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import practica.controladordispositivos.models.dto.DispositivoDTO;
+import practica.controladordispositivos.models.dto.IpDTO;
+import practica.controladordispositivos.models.dto.MacAddressLogDTO;
+import practica.controladordispositivos.models.entities.Dispositivo;
+import practica.controladordispositivos.models.entities.MacAddressLog;
+import practica.controladordispositivos.models.repositories.MacAddressLogRepository;
+import practica.controladordispositivos.models.repositories.specification.MacAddressLogSpecs;
+import practica.controladordispositivos.services.IGenericDispService;
+import practica.controladordispositivos.services.IMacAddressLogService;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -9,24 +19,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import practica.ControladorDispositivos.models.dto.DispositivoDTO;
-import practica.ControladorDispositivos.models.dto.IpDTO;
-import practica.ControladorDispositivos.models.dto.MacAddressLogDTO;
-import practica.ControladorDispositivos.models.entities.Dispositivo;
-import practica.ControladorDispositivos.models.entities.Ip;
-import practica.ControladorDispositivos.models.entities.MacAddressLog;
-import practica.ControladorDispositivos.models.repositories.MacAddressLogRepository;
-import practica.ControladorDispositivos.models.repositories.specification.MacAddressLogSpecs;
-import practica.ControladorDispositivos.services.IGenericDispService;
-import practica.ControladorDispositivos.services.IMacAddressLogService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import java.util.stream.Collectors;
 @Slf4j
-@Service("MacAddressLog")
+@Service("macAddressLog")
 public class MacAddressLogServiceImpl implements IMacAddressLogService {
 
     private final MacAddressLogRepository macAddressLogRepository;
@@ -45,7 +43,7 @@ public class MacAddressLogServiceImpl implements IMacAddressLogService {
         return macAddressLogRepository.findAll()
                 .stream()
                 .map(entity -> modelMapper.map(entity,MacAddressLogDTO.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -142,11 +140,11 @@ public class MacAddressLogServiceImpl implements IMacAddressLogService {
                     log.warn("Log no encontrado para eliminación, probablemente ya fue eliminado por otra transacción.");
                 } catch (Exception e) {
                     // Capturar otras excepciones inesperadas durante el borrado
-                    log.error("Error al eliminar log " + e.getMessage(), e);
+                    log.error("Error al eliminar log {}", e.getMessage(), e);
                     // Decide si quieres re-lanzar o continuar
                 }
             }
-        log.info("Logs eliminados: " + count);
+        log.info("Logs eliminados: {}", count);
 
         return eliminado;
     }

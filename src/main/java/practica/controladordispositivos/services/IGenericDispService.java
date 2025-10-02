@@ -1,4 +1,4 @@
-package practica.ControladorDispositivos.services;
+package practica.controladordispositivos.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,20 +1,17 @@
-package practica.ControladorDispositivos.controllers;
+package practica.controladordispositivos.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import practica.controladordispositivos.models.dto.MacAddressLogDTO;
+import practica.controladordispositivos.services.IMacAddressLogService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import practica.ControladorDispositivos.models.dto.MacAddressLogDTO;
-import practica.ControladorDispositivos.models.entities.MacAddressLog;
-import practica.ControladorDispositivos.services.IGenericDispService;
-import practica.ControladorDispositivos.services.IMacAddressLogService;
 
 import java.util.List;
 import java.util.Optional;

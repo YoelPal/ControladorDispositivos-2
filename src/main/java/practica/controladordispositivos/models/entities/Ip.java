@@ -1,4 +1,4 @@
-package practica.ControladorDispositivos.models.entities;
+package practica.controladordispositivos.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;

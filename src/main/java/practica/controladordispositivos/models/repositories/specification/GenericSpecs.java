@@ -1,8 +1,7 @@
-package practica.ControladorDispositivos.models.repositories.specification;
+package practica.controladordispositivos.models.repositories.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
-import practica.ControladorDispositivos.models.entities.Dispositivo;
 
 public class GenericSpecs {
 

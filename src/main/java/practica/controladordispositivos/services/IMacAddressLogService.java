@@ -1,9 +1,10 @@
-package practica.ControladorDispositivos.services;
+package practica.controladordispositivos.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import practica.ControladorDispositivos.models.dto.MacAddressLogDTO;
-import practica.ControladorDispositivos.models.entities.MacAddressLog;
+
+import practica.controladordispositivos.models.dto.MacAddressLogDTO;
+import practica.controladordispositivos.models.entities.MacAddressLog;
 
 import java.util.Optional;
 

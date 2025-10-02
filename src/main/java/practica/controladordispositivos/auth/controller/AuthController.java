@@ -1,15 +1,16 @@
-package practica.ControladorDispositivos.auth.controller;
+package practica.controladordispositivos.auth.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import practica.controladordispositivos.auth.service.AuthService;
+import practica.controladordispositivos.auth.usuario.User;
+import practica.controladordispositivos.auth.usuario.UserRepository;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import practica.ControladorDispositivos.auth.service.AuthService;
-import practica.ControladorDispositivos.auth.usuario.User;
-import practica.ControladorDispositivos.auth.usuario.UserRepository;
 
 import java.util.Map;
 import java.util.Optional;

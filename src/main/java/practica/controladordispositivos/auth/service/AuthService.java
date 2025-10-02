@@ -1,22 +1,24 @@
-package practica.ControladorDispositivos.auth.service;
+package practica.controladordispositivos.auth.service;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import practica.controladordispositivos.auth.controller.LoginRequest;
+import practica.controladordispositivos.auth.controller.RegisterRequest;
+import practica.controladordispositivos.auth.controller.TokenResponse;
+import practica.controladordispositivos.auth.repository.Token;
+import practica.controladordispositivos.auth.repository.TokenRepository;
+import practica.controladordispositivos.auth.usuario.User;
+import practica.controladordispositivos.auth.usuario.UserRepository;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import practica.ControladorDispositivos.auth.controller.LoginRequest;
-import practica.ControladorDispositivos.auth.controller.RegisterRequest;
-import practica.ControladorDispositivos.auth.controller.TokenResponse;
-import practica.ControladorDispositivos.auth.repository.Token;
-import practica.ControladorDispositivos.auth.repository.TokenRepository;
-import practica.ControladorDispositivos.auth.usuario.User;
-import practica.ControladorDispositivos.auth.usuario.UserRepository;
+
 import java.util.List;
 
 @Slf4j

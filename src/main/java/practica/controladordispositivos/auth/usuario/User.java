@@ -1,8 +1,8 @@
-package practica.ControladorDispositivos.auth.usuario;
+package practica.controladordispositivos.auth.usuario;
 
 import jakarta.persistence.*;
 import lombok.*;
-import practica.ControladorDispositivos.auth.repository.Token;
+import practica.controladordispositivos.auth.repository.Token;
 
 import java.util.List;
 

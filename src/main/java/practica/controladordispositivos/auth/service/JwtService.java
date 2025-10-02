@@ -1,12 +1,13 @@
-package practica.ControladorDispositivos.auth.service;
+package practica.controladordispositivos.auth.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import practica.controladordispositivos.auth.usuario.User;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import practica.ControladorDispositivos.auth.usuario.User;
 
 import javax.crypto.SecretKey;
 import java.util.Date;

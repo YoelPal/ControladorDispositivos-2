@@ -1,4 +1,4 @@
-package practica.ControladorDispositivos.models.repositories;
+package practica.controladordispositivos.models.repositories;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
-import practica.ControladorDispositivos.models.entities.Ap;
+
+import practica.controladordispositivos.models.entities.Ap;
 
 import java.util.List;
 import java.util.Optional;

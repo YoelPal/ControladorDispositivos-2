@@ -1,4 +1,4 @@
-package practica.ControladorDispositivos.auth.config;
+package practica.controladordispositivos.auth.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException; // Importa ExpiredJwtException

@@ -1,4 +1,4 @@
-package practica.ControladorDispositivos.models.repositories;
+package practica.controladordispositivos.models.repositories;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import practica.ControladorDispositivos.models.entities.MacAddressLog;
 
-import javax.crypto.Mac;
+import practica.controladordispositivos.models.entities.MacAddressLog;
+
 import java.util.List;
 import java.util.Optional;
 

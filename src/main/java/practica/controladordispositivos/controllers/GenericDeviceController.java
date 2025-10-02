@@ -1,10 +1,15 @@
-package practica.ControladorDispositivos.controllers;
+package practica.controladordispositivos.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.*;
+import practica.controladordispositivos.models.dto.DispositivoDTO;
+import practica.controladordispositivos.models.entities.Dispositivo;
+import practica.controladordispositivos.models.repositories.specification.GenericSpecs;
+import practica.controladordispositivos.services.IGenericDispService;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,10 +17,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import practica.ControladorDispositivos.models.dto.DispositivoDTO;
-import practica.ControladorDispositivos.models.entities.Dispositivo;
-import practica.ControladorDispositivos.models.repositories.specification.GenericSpecs;
-import practica.ControladorDispositivos.services.IGenericDispService;
 
 import java.util.Collections;
 import java.util.List;

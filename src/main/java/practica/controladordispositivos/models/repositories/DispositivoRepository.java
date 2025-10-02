@@ -1,7 +1,8 @@
-package practica.ControladorDispositivos.models.repositories;
+package practica.controladordispositivos.models.repositories;
 
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.NamedEntityGraph;
+import practica.controladordispositivos.models.entities.Dispositivo;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -9,13 +10,8 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
-import practica.ControladorDispositivos.models.entities.Dispositivo;
-import practica.ControladorDispositivos.models.entities.MacAddressLog;
-import practica.ControladorDispositivos.models.entities.Movil;
-import practica.ControladorDispositivos.models.entities.Pc;
 
 import java.util.List;
 import java.util.Optional;

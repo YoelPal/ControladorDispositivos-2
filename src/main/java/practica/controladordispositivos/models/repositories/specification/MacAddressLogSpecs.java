@@ -1,13 +1,12 @@
-package practica.ControladorDispositivos.models.repositories.specification;
+package practica.controladordispositivos.models.repositories.specification;
 
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Subquery;
+import practica.controladordispositivos.models.entities.Dispositivo;
+import practica.controladordispositivos.models.entities.MacAddressLog;
+
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
-import practica.ControladorDispositivos.models.entities.Dispositivo;
-import practica.ControladorDispositivos.models.entities.MacAddressLog;
 
 public class MacAddressLogSpecs {
     public static Specification<MacAddressLog> macContaining(String mac) {

@@ -1,4 +1,4 @@
-package practica.ControladorDispositivos.auth.config;
+package practica.controladordispositivos.auth.config;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -7,6 +7,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import practica.controladordispositivos.auth.repository.Token;
+import practica.controladordispositivos.auth.repository.TokenRepository;
+import practica.controladordispositivos.auth.service.JwtService;
+import practica.controladordispositivos.auth.usuario.User;
+import practica.controladordispositivos.auth.usuario.UserRepository;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,14 +22,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import practica.ControladorDispositivos.auth.repository.Token;
-import practica.ControladorDispositivos.auth.repository.TokenRepository;
-import practica.ControladorDispositivos.auth.service.JwtService;
-import practica.ControladorDispositivos.auth.usuario.User;
-import practica.ControladorDispositivos.auth.usuario.UserRepository;
 
 import java.io.IOException;
-import java.security.SignatureException;
 import java.util.Optional;
 
 @Component

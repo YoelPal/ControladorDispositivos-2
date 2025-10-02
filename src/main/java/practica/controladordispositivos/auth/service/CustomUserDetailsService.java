@@ -1,14 +1,15 @@
-package practica.ControladorDispositivos.auth.service;
+package practica.controladordispositivos.auth.service;
 
 import lombok.RequiredArgsConstructor;
+import practica.controladordispositivos.auth.usuario.User;
+import practica.controladordispositivos.auth.usuario.UserRepository;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import practica.ControladorDispositivos.auth.usuario.User;
-import practica.ControladorDispositivos.auth.usuario.UserRepository;
 
 import java.util.List;
 

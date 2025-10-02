@@ -1,11 +1,11 @@
-package practica.ControladorDispositivos.auth.repository;
+package practica.controladordispositivos.auth.repository;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import practica.ControladorDispositivos.auth.usuario.User;
+import practica.controladordispositivos.auth.usuario.User;
 
 @Data
 @Builder

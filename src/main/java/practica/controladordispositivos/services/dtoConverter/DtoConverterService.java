@@ -1,9 +1,10 @@
-package practica.ControladorDispositivos.services.dtoConverter;
+package practica.controladordispositivos.services.dtoConverter;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import practica.ControladorDispositivos.models.dto.*;
-import practica.ControladorDispositivos.models.entities.*;
+
+import practica.controladordispositivos.models.dto.*;
+import practica.controladordispositivos.models.entities.*;
 
 @Service
 public class DtoConverterService implements IDtoConverterService{

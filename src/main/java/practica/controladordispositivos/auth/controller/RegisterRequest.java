@@ -1,4 +1,4 @@
-package practica.ControladorDispositivos.auth.controller;
+package practica.controladordispositivos.auth.controller;
 
 public record RegisterRequest(String email,
                               String password,

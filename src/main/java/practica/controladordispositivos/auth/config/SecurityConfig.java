@@ -1,6 +1,9 @@
-package practica.ControladorDispositivos.auth.config;
+package practica.controladordispositivos.auth.config;
 
 import lombok.RequiredArgsConstructor;
+import practica.controladordispositivos.auth.repository.Token;
+import practica.controladordispositivos.auth.repository.TokenRepository;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -17,8 +20,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import practica.ControladorDispositivos.auth.repository.Token;
-import practica.ControladorDispositivos.auth.repository.TokenRepository;
+
 import java.util.Arrays;
 import java.util.List;
 

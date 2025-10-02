@@ -1,7 +1,8 @@
-package practica.ControladorDispositivos.services.MacsManager;
+package practica.controladordispositivos.services.MacsManager;
 
 import org.springframework.web.multipart.MultipartFile;
-import practica.ControladorDispositivos.models.entities.MacAddressLog;
+
+import practica.controladordispositivos.models.entities.MacAddressLog;
 
 import java.util.List;
 

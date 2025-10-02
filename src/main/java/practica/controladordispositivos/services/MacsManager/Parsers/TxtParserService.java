@@ -1,8 +1,9 @@
-package practica.ControladorDispositivos.services.MacsManager.Parsers;
+package practica.controladordispositivos.services.MacsManager.Parsers;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import practica.ControladorDispositivos.models.entities.MacAddressLog;
+
+import practica.controladordispositivos.models.entities.MacAddressLog;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

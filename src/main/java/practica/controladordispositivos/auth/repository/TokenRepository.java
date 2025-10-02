@@ -1,9 +1,10 @@
-package practica.ControladorDispositivos.auth.repository;
+package practica.controladordispositivos.auth.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import practica.ControladorDispositivos.auth.usuario.User;
+
+import practica.controladordispositivos.auth.usuario.User;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,14 +1,15 @@
-package practica.ControladorDispositivos.controllers;
+package practica.controladordispositivos.controllers;
 
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import practica.controladordispositivos.models.dto.DispositivoDTO;
+import practica.controladordispositivos.models.dto.PcDTO;
+import practica.controladordispositivos.models.entities.Dispositivo;
+import practica.controladordispositivos.models.entities.Pc;
+import practica.controladordispositivos.services.IGenericDispService;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
-import practica.ControladorDispositivos.models.dto.DispositivoDTO;
-import practica.ControladorDispositivos.models.dto.PcDTO;
-import practica.ControladorDispositivos.models.entities.Dispositivo;
-import practica.ControladorDispositivos.models.entities.Pc;
-import practica.ControladorDispositivos.services.IGenericDispService;
 
 @RestController
 @RequestMapping("/pc")

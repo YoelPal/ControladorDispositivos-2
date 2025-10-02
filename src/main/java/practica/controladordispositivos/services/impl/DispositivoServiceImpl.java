@@ -1,17 +1,17 @@
-package practica.ControladorDispositivos.services.impl;
+package practica.controladordispositivos.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import practica.controladordispositivos.models.dto.*;
+import practica.controladordispositivos.models.entities.*;
+import practica.controladordispositivos.models.repositories.DispositivoRepository;
+import practica.controladordispositivos.services.IGenericDispService;
+import practica.controladordispositivos.services.dtoConverter.IDtoConverterService;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import practica.ControladorDispositivos.models.dto.*;
-import practica.ControladorDispositivos.models.entities.*;
-import practica.ControladorDispositivos.models.repositories.DispositivoRepository;
-import practica.ControladorDispositivos.models.repositories.specification.DispositivosSpecs;
-import practica.ControladorDispositivos.services.IGenericDispService;
-import practica.ControladorDispositivos.services.dtoConverter.IDtoConverterService;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,8 +1,9 @@
-package practica.ControladorDispositivos.services.MacsManager;
+package practica.controladordispositivos.services.MacsManager;
 
 import org.springframework.stereotype.Service;
-import practica.ControladorDispositivos.models.entities.MacAddressLog;
-import practica.ControladorDispositivos.models.repositories.MacAddressLogRepository;
+
+import practica.controladordispositivos.models.entities.MacAddressLog;
+import practica.controladordispositivos.models.repositories.MacAddressLogRepository;
 
 import java.util.List;
 
